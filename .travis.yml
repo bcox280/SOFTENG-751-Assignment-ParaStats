@@ -1,0 +1,8 @@
+language: cpp
+sudo: enabled
+before_install:
+- sudo apt update -qq
+- sudo apt install -qq ocl-icd-opencl-dev
+script: cmake
+notifications:
+    slack: highperformingcancer:IILTkexBkKQ6aZekVZ87d9KM
