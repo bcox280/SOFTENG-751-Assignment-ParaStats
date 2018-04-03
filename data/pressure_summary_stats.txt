@@ -1,0 +1,15 @@
+pressure_normal_1280000.csv
+Mean: 1020.000332
+Mode: 1014.947028
+Median: 1020.000957
+Min: 1014.947028
+Max: 1024.641906
+Std dev: 1.000279
+
+pressure_normal_1280000.csv
+Mean: 1019.999666
+Mode: 1011.820234
+Median: 1020.000106
+Min: 1011.820234
+Max: 1028.844411
+Std dev: 0.996211

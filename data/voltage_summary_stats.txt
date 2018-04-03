@@ -1,0 +1,15 @@
+voltage_normal_1280000.csv
+Mean: 230.500664
+Mode: 220.394056
+Median: 230.501914
+Min: 220.394056
+Max: 239.783813
+Std dev: 2.000558
+
+voltage_normal_1280000.csv
+Mean: 230.499332
+Mode: 214.140468
+Median: 230.500212
+Min: 214.140468
+Max: 248.188822
+Std dev: 1.992421

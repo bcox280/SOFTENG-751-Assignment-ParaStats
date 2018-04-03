@@ -1,0 +1,15 @@
+temperature_normal_1280000.csv
+Mean: 20.000332
+Mode: 14.947028
+Median: 20.000957
+Min: 14.947028
+Max: 24.641906
+Std dev: 1.000279
+
+temperature_normal_1280000.csv
+Mean: 19.999666
+Mode: 11.820234
+Median: 20.000106
+Min: 11.820234
+Max: 28.844411
+Std dev: 0.996211
