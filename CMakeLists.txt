@@ -16,11 +16,12 @@ else(WIN32)
     set(OPENCL_LIBRARIES OpenCL)
 endif(WIN32)
 
+# Source code of application
+set(SOURCE_FILES main.cpp)
+
 # Compiler flags
 set(CMAKE_CXX_STANDARD 17)
 
-# Source code of application
-set (SOURCE_FILES hello_world.cpp)
 
 # Set up executable
 add_executable (SOFTENG-751-Assignment-ParaStats ${SOURCE_FILES})
