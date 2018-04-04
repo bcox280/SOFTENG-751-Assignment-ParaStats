@@ -3,6 +3,10 @@ sudo: enabled
 before_install:
 - sudo apt update -qq
 - sudo apt install -qq ocl-icd-opencl-dev
-script: cmake
+script: cmake -DCMAKE_BUILD_TYPE= -G "CodeBlocks - Unix Makefiles"
 notifications:
-    slack: highperformingcancer:IILTkexBkKQ6aZekVZ87d9KM
+    slack:
+        rooms:
+          - parastats:7DSnysk6wGWgnw0zFVSjEKvS#travis
+        on_success: change
+        on_failure: always
