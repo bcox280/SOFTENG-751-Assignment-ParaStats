@@ -17,7 +17,9 @@ else(WIN32)
 endif(WIN32)
 
 # Source code of application
-set(SOURCE_FILES src/main.cpp)
+set(SOURCE_FILES src/main.cpp src/computations src/statistics)
+
+include_directories(src/computations src/statistics)
 
 # Compiler flags
 set(CMAKE_CXX_STANDARD 17)

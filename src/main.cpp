@@ -3,6 +3,9 @@
 #include <vector>
 #include <sstream>
 #include <cstring>
+#include "SequentialComputation.cpp"
+#include "SummaryStatistics.cpp"
+#include "AbstractComputation.cpp"
 
 using namespace std;
 
@@ -53,24 +56,9 @@ int main(int argc, char *argv[]) {
         printHelp();
     }
 
-    ifstream input(inputFilename);
-
-    for (string line; getline(input, line); ) {
-        std::vector<double> vect;
-        std::stringstream ss(line);
-        double value;
-        while (ss >> value) {
-            vect.push_back(value);
-
-            if (ss.peek() == ',') {
-                ss.ignore();
-            }
-        }
-
-        for (int i = 0; i < vect.size(); i++) {
-            std::cout << vect.at(i) << std::endl;
-        }
-    }
+    std::cout << inputFilename << std::endl;
+    auto seq = SequentialComputation(inputFilename);
+    seq.computeData();
 
     return 0;
 }
