@@ -13,8 +13,8 @@ bool checkOption(string option, string input);
 int main(int argc, char *argv[]) {
     const string version ("beta");
     string outputFilename ("results.txt");
-    string inputFilename ("inputData.csv");
-    bool parrallel = true;
+    string inputFilename ("../data/voltage_normal_1280000.csv");
+    bool parallel = true;
     bool quiet = false;
 
     bool inputChangeFlag = false;
@@ -39,8 +39,8 @@ int main(int argc, char *argv[]) {
                 return 0;
             } else if (checkOption("q", argv[i])) {
                 quiet = true;
-            } else if (checkOption("h", argv[i])) {
-                parrallel = false;
+            } else if (checkOption("s", argv[i])) {
+                parallel = false;
             } else if (checkOption("i", argv[i])) {
                 inputChangeFlag = true;
             } else if (checkOption("o", argv[i])) {
@@ -53,21 +53,21 @@ int main(int argc, char *argv[]) {
         printHelp();
     }
 
-    ifstream input( "../data.csv" );
+    ifstream input(inputFilename);
 
     for (string line; getline(input, line); ) {
         std::vector<double> vect;
         std::stringstream ss(line);
-        double i;
-        while (ss >> i) {
-            vect.push_back(i);
+        double value;
+        while (ss >> value) {
+            vect.push_back(value);
 
             if (ss.peek() == ',') {
                 ss.ignore();
             }
         }
 
-        for (i = 0; i < vect.size(); i++) {
+        for (int i = 0; i < vect.size(); i++) {
             std::cout << vect.at(i) << std::endl;
         }
     }
