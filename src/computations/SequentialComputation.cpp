@@ -4,7 +4,6 @@ SequentialComputation::SequentialComputation(const string &fileName) : AbstractC
 
     ifstream input(fileName);
 
-    std::cout << fileName << std::endl;
     for (string line; getline(input, line); ) {
         std::vector<double> vect;
         std::stringstream ss(line);
@@ -16,10 +15,6 @@ SequentialComputation::SequentialComputation(const string &fileName) : AbstractC
             if (ss.peek() == ',') {
                 ss.ignore();
             }
-        }
-
-        for (double i : vect) {
-            std::cout << i << std::endl;
         }
     }
 }

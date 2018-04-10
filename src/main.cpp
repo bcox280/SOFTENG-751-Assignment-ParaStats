@@ -3,9 +3,14 @@
 #include <vector>
 #include <sstream>
 #include <cstring>
+#include "ParallelComputation.cpp"
 #include "SequentialComputation.cpp"
 #include "SummaryStatistics.cpp"
 #include "AbstractComputation.cpp"
+#include <chrono>
+
+typedef std::chrono::high_resolution_clock Clock;
+
 
 using namespace std;
 
@@ -56,9 +61,25 @@ int main(int argc, char *argv[]) {
         printHelp();
     }
 
-    std::cout << inputFilename << std::endl;
+    //Fast
+    auto pt1 = Clock::now();
+
+    auto par = ParallelComputation(inputFilename);
+
+    auto pt2 = Clock::now();
+    std::cout << "Delta para t2-t1: "
+              << std::chrono::duration_cast<std::chrono::nanoseconds>(pt2 - pt1).count()
+              << " nanoseconds" << std::endl;
+
+    //Slow
+    auto st1 = Clock::now();
+
     auto seq = SequentialComputation(inputFilename);
-    seq.computeData();
+
+    auto st2 = Clock::now();
+    std::cout << "Delta seq t2-t1: "
+              << std::chrono::duration_cast<std::chrono::nanoseconds>(st2 - st1).count()
+              << " nanoseconds" << std::endl;
 
     return 0;
 }
@@ -82,4 +103,8 @@ bool checkOption(string option, string input) {
         return true;
     }
     return false;
+}
+
+void runComputation() {
+
 }
