@@ -4,12 +4,20 @@ Mode: 14.947028
 Median: 20.000957
 Min: 14.947028
 Max: 24.641906
-Std dev: 1.000279
+Estimated Variance: 1.000558
+Estimated Std dev: 1.000279
+Skewness: -0.000793
+Kurtosis: 3.001847
+Sum: 25600424.822694
 
-temperature_normal_1280000.csv
+temperature_logistic_1280000.csv
 Mean: 19.999666
 Mode: 11.820234
 Median: 20.000106
 Min: 11.820234
 Max: 28.844411
-Std dev: 0.996211
+Estimated Variance: 0.992435
+Estimated Std dev: 0.996211
+Skewness: 0.002459
+Kurtosis: 4.192381
+Sum: 25599572.791118

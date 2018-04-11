@@ -4,12 +4,20 @@ Mode: 220.394056
 Median: 230.501914
 Min: 220.394056
 Max: 239.783813
-Std dev: 2.000558
+Estimated Variance: 4.002230
+Estimated Std dev: 2.000558
+Skewness: -0.000793
+Kurtosis: 3.001847
+Sum: 295040849.645399
 
-voltage_normal_1280000.csv
+voltage_logistic_1280000.csv
 Mean: 230.499332
 Mode: 214.140468
 Median: 230.500212
 Min: 214.140468
 Max: 248.188822
-Std dev: 1.992421
+Estimated Variance: 3.969742
+Estimated Std dev: 1.992421
+Skewness: 0.002459
+Kurtosis: 4.192381
+Sum: 295039145.582235

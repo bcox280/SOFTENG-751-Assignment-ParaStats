@@ -4,12 +4,20 @@ Mode: 1014.947028
 Median: 1020.000957
 Min: 1014.947028
 Max: 1024.641906
-Std dev: 1.000279
+Estimated Variance: 1.000558
+Estimated Std dev: 1.000279
+Skewness: -0.000793
+Kurtosis: 3.001847
+Sum: 1305600424.822689
 
-pressure_normal_1280000.csv
+pressure_logistic_1280000.csv
 Mean: 1019.999666
 Mode: 1011.820234
 Median: 1020.000106
 Min: 1011.820234
 Max: 1028.844411
-Std dev: 0.996211
+Estimated Variance: 0.992435
+Estimated Std dev: 0.996211
+Skewness: 0.002459
+Kurtosis: 4.192381
+Sum: 1305599572.791142
