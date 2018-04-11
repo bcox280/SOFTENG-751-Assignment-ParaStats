@@ -16,9 +16,10 @@
 class ParallelComputation : public AbstractComputation {
 public:
     ParallelComputation(const string &fileName);
+
     void computeData();
+
     SummaryStatistics provideProgressUpdate();
-    string createSummary();
 };
 
 #endif //SOFTENG_751_ASSIGNMENT_PARASTATS_PARALLELCOMPUATION_H

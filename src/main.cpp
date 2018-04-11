@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <sstream>
 #include <cstring>
@@ -15,13 +14,15 @@ typedef std::chrono::high_resolution_clock Clock;
 using namespace std;
 
 void printHelp();
+
 void printVersion(string version);
+
 bool checkOption(string option, string input);
 
 int main(int argc, char *argv[]) {
-    const string version ("beta");
-    string outputFilename ("results.txt");
-    string inputFilename ("../data/voltage_normal_1280000.csv");
+    const string version("beta");
+    string outputFilename("results.txt");
+    string inputFilename("../data/voltage_normal_1280000.csv");
     bool parallel = true;
     bool quiet = false;
 
@@ -30,12 +31,12 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < argc; i++) {
         if (inputChangeFlag) {
             inputChangeFlag = false;
-            if (checkOption("i", argv[i-1])) {
+            if (checkOption("i", argv[i - 1])) {
                 inputFilename = argv[i];
             }
         } else if (outputChangeFlag) {
             outputChangeFlag = false;
-            if (checkOption("o", argv[i-1])) {
+            if (checkOption("o", argv[i - 1])) {
                 outputFilename = argv[i];
             }
         } else {
@@ -61,25 +62,29 @@ int main(int argc, char *argv[]) {
         printHelp();
     }
 
-    //Fast
-    auto pt1 = Clock::now();
 
-    auto par = ParallelComputation(inputFilename);
+    SequentialComputation sq = SequentialComputation(inputFilename);
+    sq.computeData();
 
-    auto pt2 = Clock::now();
-    std::cout << "Delta para t2-t1: "
-              << std::chrono::duration_cast<std::chrono::nanoseconds>(pt2 - pt1).count()
-              << " nanoseconds" << std::endl;
-
-    //Slow
-    auto st1 = Clock::now();
-
-    auto seq = SequentialComputation(inputFilename);
-
-    auto st2 = Clock::now();
-    std::cout << "Delta seq t2-t1: "
-              << std::chrono::duration_cast<std::chrono::nanoseconds>(st2 - st1).count()
-              << " nanoseconds" << std::endl;
+//    //Fast
+//    auto pt1 = Clock::now();
+//
+//    auto par = ParallelComputation(inputFilename);
+//
+//    auto pt2 = Clock::now();
+//    std::cout << "Delta para t2-t1: "
+//              << std::chrono::duration_cast<std::chrono::nanoseconds>(pt2 - pt1).count()
+//              << " nanoseconds" << std::endl;
+//
+//    //Slow
+//    auto st1 = Clock::now();
+//
+//    auto seq = SequentialComputation(inputFilename);
+//
+//    auto st2 = Clock::now();
+//    std::cout << "Delta seq t2-t1: "
+//              << std::chrono::duration_cast<std::chrono::nanoseconds>(st2 - st1).count()
+//              << " nanoseconds" << std::endl;
 
     return 0;
 }

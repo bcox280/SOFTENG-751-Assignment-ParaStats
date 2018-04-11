@@ -2,8 +2,8 @@
 
 ParallelComputation::ParallelComputation(const string &fileName) : AbstractComputation(fileName) {
 
-    const char * valueDelimiter = ",";
-    const char * lineDelimiter = "\n";
+    const char *valueDelimiter = ",";
+    const char *lineDelimiter = "\n";
 
     std::vector<double> vect;
     char *contents, *line, *indValue, *ptrContents, *ptrLine;
@@ -21,7 +21,7 @@ ParallelComputation::ParallelComputation(const string &fileName) : AbstractCompu
         //Close the stream
         inputStr.close();
 
-        for (int j = 1; ; j++, contents = nullptr) {
+        for (int j = 1;; j++, contents = nullptr) {
             //Split each chunk on a new line, while keeping the location of where the pointer is
             line = strtok_r(contents, lineDelimiter, &ptrContents);
             //If its a null pointer, end is found
@@ -31,7 +31,7 @@ ParallelComputation::ParallelComputation(const string &fileName) : AbstractCompu
 
             // TODO Send off chunk to a worker thread
 
-            for ( ; ; line = nullptr) {
+            for (;; line = nullptr) {
                 //Split each line into individual values, while keeping the location of where the pointer is in the line
                 indValue = strtok_r(line, valueDelimiter, &ptrLine);
                 //If the value is not a null pointer we can add it to the vector, else we have reached the end of the line
@@ -51,8 +51,4 @@ void ParallelComputation::computeData() {
 
 SummaryStatistics ParallelComputation::provideProgressUpdate() {
     return SummaryStatistics();
-}
-
-string ParallelComputation::createSummary() {
-    return string();
 }

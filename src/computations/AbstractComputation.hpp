@@ -11,11 +11,12 @@ using namespace std;
  * the implementation that the children class will need to follow
  */
 class AbstractComputation {
-    public:
-        explicit AbstractComputation(const string &fileName);
-        virtual void computeData() = 0;
-        virtual SummaryStatistics provideProgressUpdate() = 0;
-        virtual string createSummary() = 0;
+public:
+    explicit AbstractComputation(const string &fileName);
+
+    virtual void computeData() = 0;
+
+    virtual SummaryStatistics provideProgressUpdate() = 0;
 };
 
 #endif //SOFTENG_751_ASSIGNMENT_PARASTATS_ABSTRACTCOMPUTATION_H

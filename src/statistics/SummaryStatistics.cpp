@@ -1,4 +1,9 @@
+#include <cmath>
+#include <algorithm>
 #include "SummaryStatistics.hpp"
+
+/* TODO Check that the following source for our calculations is correct
+https://stats.stackexchange.com/questions/88837/single-pass-algorithm-for-kurtosis */
 
 SummaryStatistics::SummaryStatistics() = default;
 
@@ -34,28 +39,33 @@ void SummaryStatistics::setM4(double m4) {
     SummaryStatistics::m4 = m4;
 }
 
-double SummaryStatistics::getM5() const {
-    return m5;
+std::vector<double> SummaryStatistics::getModes() const {
+    return modes;
 }
 
-void SummaryStatistics::setM5(double m5) {
-    SummaryStatistics::m5 = m5;
+void SummaryStatistics::setModes(std::vector<double> modes) {
+    SummaryStatistics::modes = modes;
 }
 
-double SummaryStatistics::getMode() const {
-    return mode;
+
+double SummaryStatistics::getUpperMedian() const {
+    return upperMedian;
 }
 
-void SummaryStatistics::setMode(double mode) {
-    SummaryStatistics::mode = mode;
+void SummaryStatistics::setUpperMedian(double upperMedian) {
+    SummaryStatistics::upperMedian = upperMedian;
 }
 
-double SummaryStatistics::getMedian() const {
-    return median;
+double SummaryStatistics::getLowerMedian() const {
+    return lowerMedian;
 }
 
-void SummaryStatistics::setMedian(double median) {
-    SummaryStatistics::median = median;
+void SummaryStatistics::setLowerMedian(double lowerMedian) {
+    SummaryStatistics::lowerMedian = lowerMedian;
+}
+
+double SummaryStatistics::getFinancialMedian() const {
+    return (getUpperMedian() * 0.5 + getLowerMedian() * 0.5);
 }
 
 double SummaryStatistics::getMin() const {
@@ -74,31 +84,43 @@ void SummaryStatistics::setMax(double max) {
     SummaryStatistics::max = max;
 }
 
-unsigned int SummaryStatistics::getCount() const {
+unsigned long long SummaryStatistics::getCount() const {
     return count;
 }
 
-void SummaryStatistics::setCount(unsigned int count) {
+void SummaryStatistics::setCount(unsigned long long count) {
     SummaryStatistics::count = count;
 }
 
 double SummaryStatistics::getVariance() {
-    return 0;
+    return getM2() / getCount();
+}
+
+double SummaryStatistics::getEstimatedVariance() {
+    return getM2() / (getCount() - 1);
 }
 
 double SummaryStatistics::getStandardDev() {
-    return 0;
+    return sqrt(getVariance());
+}
+
+double SummaryStatistics::getEstimatedStandardDev() {
+    return sqrt(getEstimatedVariance());
 }
 
 double SummaryStatistics::getSkewneess() {
-    return 0;
+    return sqrt(getCount()) * getM3() / pow(getM2(), 1.5);
 }
 
 double SummaryStatistics::getKurtosis() {
-    return 0;
+    return (getCount() * getM4() / (getM2() * getM2()));
+}
+
+double SummaryStatistics::getExcessKurtosis() {
+    return getKurtosis() - 3;
 }
 
 double SummaryStatistics::getSum() {
-    return 0;
+    return getM1() * getCount();
 }
 

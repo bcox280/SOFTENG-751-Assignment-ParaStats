@@ -7,8 +7,10 @@
  */
 class SummaryStatistics {
 private:
-    double m1, m2, m3, m4, m5, mode, median,  min, max;
-    unsigned int count;
+    double m2, m3, m4, min, max, upperMedian, lowerMedian;
+    double m1 = m2 = m3 = m4 = min = max = upperMedian = lowerMedian = 0;
+    unsigned long long count = 0;
+    std::vector<double> modes;
 public:
     SummaryStatistics();
 
@@ -28,17 +30,19 @@ public:
 
     void setM4(double m4);
 
-    double getM5() const;
+    std::vector<double> getModes() const;
 
-    void setM5(double m5);
+    void setModes(std::vector<double> mode);
 
-    double getMode() const;
+    double getFinancialMedian() const;
 
-    void setMode(double mode);
+    double getUpperMedian() const;
 
-    double getMedian() const;
+    void setUpperMedian(double upperMedian);
 
-    void setMedian(double median);
+    double getLowerMedian() const;
+
+    void setLowerMedian(double lowerMedian);
 
     double getMin() const;
 
@@ -48,17 +52,23 @@ public:
 
     void setMax(double max);
 
-    unsigned int getCount() const;
+    unsigned long long getCount() const;
 
-    void setCount(unsigned int count);
+    void setCount(unsigned long long count);
 
     double getVariance();
 
+    double getEstimatedVariance();
+
     double getStandardDev();
+
+    double getEstimatedStandardDev();
 
     double getSkewneess();
 
     double getKurtosis();
+
+    double getExcessKurtosis();
 
     double getSum();
 };
