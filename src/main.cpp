@@ -22,7 +22,7 @@ bool checkOption(string option, string input);
 int main(int argc, char *argv[]) {
     const string version("beta");
     string outputFilename("results.txt");
-    string inputFilename("../data/voltage_normal_1280000.csv");
+    string inputFilename("../data/voltage_normal_10240000.csv");
     bool parallel = true;
     bool quiet = false;
 
@@ -62,9 +62,21 @@ int main(int argc, char *argv[]) {
         printHelp();
     }
 
-
+    auto pt1 = Clock::now();
     SequentialComputation sq = SequentialComputation(inputFilename);
     sq.computeData();
+//    auto pt1 = Clock::now();
+//    sq = SequentialComputation(inputFilename);
+//    sq.computeData();
+//    sq = SequentialComputation(inputFilename);
+//    sq.computeData();
+//    sq = SequentialComputation(inputFilename);
+//    sq.computeData();
+    auto pt2 = Clock::now();
+    std::cout << "Delta sez t2-t1: "
+              << std::chrono::duration_cast<std::chrono::nanoseconds>(pt2 - pt1).count() / 1000000
+              << " milliseconds " << std::endl;
+
 
 //    //Fast
 //    auto pt1 = Clock::now();

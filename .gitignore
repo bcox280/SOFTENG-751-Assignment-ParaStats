@@ -35,3 +35,6 @@
 .idea/
 cmake-build-debug/
 cmake-build-default/
+
+# Very large datasets
+data/voltage_normal_655360000.csv
