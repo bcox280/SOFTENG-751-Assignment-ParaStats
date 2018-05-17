@@ -62,20 +62,14 @@ int main(int argc, char *argv[]) {
         printHelp();
     }
 
-    auto pt1 = Clock::now();
-    SequentialComputation sq = SequentialComputation(inputFilename);
-    sq.computeData();
 //    auto pt1 = Clock::now();
-//    sq = SequentialComputation(inputFilename);
+//    SequentialComputation sq = SequentialComputation(inputFilename);
 //    sq.computeData();
-//    sq = SequentialComputation(inputFilename);
-//    sq.computeData();
-//    sq = SequentialComputation(inputFilename);
-//    sq.computeData();
-    auto pt2 = Clock::now();
-    std::cout << "Delta sez t2-t1: "
-              << std::chrono::duration_cast<std::chrono::nanoseconds>(pt2 - pt1).count() / 1000000
-              << " milliseconds " << std::endl;
+
+//    auto pt2 = Clock::now();
+//    std::cout << "Delta sez t2-t1: "
+//              << std::chrono::duration_cast<std::chrono::nanoseconds>(pt2 - pt1).count() / 1000000
+//              << " milliseconds " << std::endl;
 
 
     ParallelComputation pr = ParallelComputation(inputFilename);

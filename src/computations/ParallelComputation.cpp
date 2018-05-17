@@ -65,7 +65,7 @@ void ParallelComputation::computeData() {
          * Step 1: Select device and create context and queue
          */
         // TODO: Implement choosing of devices from commandline arguments
-        cl_uint deviceIndex = 0; // 0 for CPU, 1 for GPU if available
+        cl_uint deviceIndex = 1; // 0 for CPU, 1 for GPU if available
 
         // Get list of platforms
         std::vector<cl::Platform> platforms;
@@ -141,9 +141,9 @@ void ParallelComputation::computeData() {
 
         // Create kernel object, use OpenCL 2 syntax if not using nvidia
 #ifndef NVIDIA
-        cl::KernelFunctor<cl::Buffer, cl::Buffer, cl::LocalSpaceArg, cl::LocalSpaceArg> minmax(program, "minmax");
+        cl::KernelFunctor<cl::Buffer, cl::Buffer, cl::LocalSpaceArg> minmax(program, "minmax");
 #else
-        cl::make_kernel<cl::Buffer, cl::Buffer, cl::LocalSpaceArg, cl::LocalSpaceArg> minmax(program, "minmax");
+        cl::make_kernel<cl::Buffer, cl::Buffer, cl::LocalSpaceArg> minmax(program, "minmax");
 #endif
 
         // Now that we know the size of the work_groups, we can set the number of work
@@ -174,7 +174,6 @@ void ParallelComputation::computeData() {
                 ),
                 d_input,
                 d_output_stats,
-                cl::Local(sizeof(double)*work_group_size),
                 cl::Local(sizeof(double)*work_group_size));
 
         // TODO update summary statistics
