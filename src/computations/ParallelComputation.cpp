@@ -51,11 +51,11 @@ void ParallelComputation::computeData() {
     /************************
      * Step 0: Declare host variables
      */
-    std::string input = "../src/kernels/minmax.cl"; // Kernel to build
+    std::string input = "../src/kernels/stats.cl"; // Kernel to build
     ::size_t work_group_size;
 
     // Random vector input size
-    const unsigned int input_vect_size = 1024;
+    ::size_t input_vect_size = 1024;
     // Device buffers
     cl::Buffer d_input;
 
@@ -81,11 +81,11 @@ void ParallelComputation::computeData() {
 
         // Get list of devices
         unsigned long numDevices = devices.size();
-        std::cout << endl << numDevices << " devices found!" << std::endl;
+        cout << numDevices << " devices found!" << endl;
 
         // Check device index in range
         if (deviceIndex >= numDevices) {
-            std::cout << "Invalid device index" << std::endl;
+            cout << "Invalid device index" << endl;
             return;
         }
 
@@ -102,7 +102,7 @@ void ParallelComputation::computeData() {
         }
 #endif
         device.getInfo(info, &name);
-        std::cout << "\nUsing OpenCL device: " << name << std::endl;
+        cout << "Using OpenCL device: " << name << endl;
 
         // TODO: Replace this section with a loop going through all devices
         std::vector<cl::Device> chosen_device;
@@ -126,7 +126,7 @@ void ParallelComputation::computeData() {
         // Load in kernel source, creating a program object for the context
         std::ifstream stream(input.c_str());
         if (!stream.is_open()) {
-            std::cout << "Cannot open file: " << input << std::endl;
+            cout << "Cannot open file: " << input << endl;
             exit(1);
         }
         cl::Program program(context, std::string(
@@ -134,16 +134,17 @@ void ParallelComputation::computeData() {
                 (std::istreambuf_iterator<char>())), true);
 
         // Create the kernel object for querying information
-        cl::Kernel ko_minmax(program, "minmax");
+        cl::Kernel ko_stats(program, "stats");
 
         // Get the work group size
-        work_group_size = ko_minmax.getWorkGroupInfo<CL_KERNEL_WORK_GROUP_SIZE>(device);
+        // TODO: Better determine work group size
+        work_group_size = ko_stats.getWorkGroupInfo<CL_KERNEL_WORK_GROUP_SIZE>(device);
 
         // Create kernel object, use OpenCL 2 syntax if not using nvidia
-#ifndef NVIDIA
-        cl::KernelFunctor<cl::Buffer, cl::Buffer, cl::LocalSpaceArg> minmax(program, "minmax");
+#ifdef NVIDIA
+        cl::make_kernel<cl::Buffer, cl::Buffer, cl::LocalSpaceArg, cl::LocalSpaceArg> stats(program, "stats");
 #else
-        cl::make_kernel<cl::Buffer, cl::Buffer, cl::LocalSpaceArg> minmax(program, "minmax");
+        cl::KernelFunctor<cl::Buffer, cl::Buffer, cl::LocalSpaceArg, cl::LocalSpaceArg> stats(program, "stats");
 #endif
 
         // Now that we know the size of the work_groups, we can set the number of work
@@ -153,8 +154,7 @@ void ParallelComputation::computeData() {
             nwork_groups = device.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
             work_group_size = input_vect.size() / nwork_groups;
         }
-        cout << nwork_groups << endl;
-        cout << work_group_size << endl;
+        cout << nwork_groups << " work groups, " << work_group_size << " work items per group" << endl << endl;
 
         // Declare output buffer
         cl::Buffer d_output_stats = cl::Buffer(context, CL_MEM_WRITE_ONLY, sizeof(rawStats)*nwork_groups);
@@ -165,16 +165,16 @@ void ParallelComputation::computeData() {
 
         // Execute the kernel over the entire range of our 1d input data set
         // using the maximum number of work group items for this device
-        minmax(
+        stats(
                 cl::EnqueueArgs(
                         queue,
                         cl::NDRange(input_vect.size()),
-                        //cl::NullRange,
                         cl::NDRange(work_group_size)
                 ),
                 d_input,
                 d_output_stats,
-                cl::Local(sizeof(double)*work_group_size));
+                cl::Local(sizeof(double)*work_group_size),
+                cl::Local(sizeof(moments)*(work_group_size/2)));
 
         // TODO update summary statistics
 
@@ -182,18 +182,36 @@ void ParallelComputation::computeData() {
         std::vector<rawStats> stat_values(nwork_groups);
         cl::copy(queue, d_output_stats, stat_values.begin(), stat_values.end());
         rawStats final_value = stat_values[0];
+        double mean_sum = stat_values[0].rawMoments.m1;
         // Reduce results on host
-        for(int i = 1; i < nwork_groups; i++) {
+        for (int i = 1; i < nwork_groups; i++) {
             final_value.min = (final_value.min>stat_values[i].min) ? stat_values[i].min : final_value.min;
             final_value.max = (final_value.max<stat_values[i].max) ? stat_values[i].max : final_value.max;
+            mean_sum += stat_values[i].rawMoments.m1;
         }
+        final_value.rawMoments.m1 = mean_sum / nwork_groups;
+        // TODO: Reduce m2, m3, m4 on host
+        // TODO: Reduce moments incrementally to prevent overflow
+//        double delta;
+//        for (int i = 1; i < ceil(log(nwork_groups, 2)); i*=2) { // Moments
+//            for (int j = 1; j < nwork_groups; j++) {
+//                if (!(i % 2) && ((i + 1) < nwork_groups)) {
+//                    delta = stat_values[i + 1].rawMoments.m1 - stat_values[i].rawMoments.m1;
+//                    stat_values[i].rawMoments.m1 = stat_values[i].rawMoments.m1 + (delta * 0.5);
+//                }
+//            }
+//        }
         // Print results to screen
-        printf(" Min value = %f\n", final_value.min);
-        printf(" Max value = %f\n", final_value.max);
+        printf("Min value = %.17g\n", final_value.min);
+        printf("Max value = %.17g\n", final_value.max);
+        printf("M1 = %.17g\n", final_value.rawMoments.m1);
+        printf("M2(workgroup1) = %.17g\n", final_value.rawMoments.m2);
+        printf("M3(workgroup1) = %.17g\n", final_value.rawMoments.m3);
+        printf("M4(workgroup1) = %.17g\n", final_value.rawMoments.m4);
     }
     catch (cl::Error& err) {
-        std::cout << "Exception\n";
-        std::cerr << "ERROR: " << err.what() << "(" << err.err() << ")" << std::endl;
+        cout << "Exception\n";
+        cerr << "ERROR: " << err.what() << "(" << err.err() << ")" << endl;
     }
 
 }

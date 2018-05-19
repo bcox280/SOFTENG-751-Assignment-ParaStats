@@ -108,7 +108,7 @@ double SummaryStatistics::getEstimatedStandardDev() {
     return sqrt(getEstimatedVariance());
 }
 
-double SummaryStatistics::getSkewneess() {
+double SummaryStatistics::getSkewness() {
     return sqrt(getCount()) * getM3() / pow(getM2(), 1.5);
 }
 

@@ -17,7 +17,7 @@ else(WIN32)
 endif(WIN32)
 
 # Source code of application
-set(SOURCE_FILES src/main.cpp src/computations src/statistics)
+set(SOURCE_FILES src/main.cpp src/computations src/statistics src/kernels)
 
 include_directories(src/computations src/statistics)
 

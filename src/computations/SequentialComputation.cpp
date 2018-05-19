@@ -105,7 +105,7 @@ void SequentialComputation::computeData() {
     cout << "Max " << finalStats.getMax() << endl;
     cout << "Estimated variance " << finalStats.getEstimatedVariance() << endl;
     cout << "Estimated standard deviation " << finalStats.getEstimatedStandardDev() << endl;
-    cout << "Skewness " << finalStats.getSkewneess() << endl;
+    cout << "Skewness " << finalStats.getSkewness() << endl;
     cout << "Kurtosis (normal) " << finalStats.getKurtosis() << endl;
     cout << "Sum " << finalStats.getSum() << endl;
     cout << "2nd moment " << finalStats.getM2() << endl;

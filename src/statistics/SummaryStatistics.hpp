@@ -64,7 +64,7 @@ public:
 
     double getEstimatedStandardDev();
 
-    double getSkewneess();
+    double getSkewness();
 
     double getKurtosis();
 
