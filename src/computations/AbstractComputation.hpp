@@ -1,7 +1,6 @@
 #ifndef SOFTENG_751_ASSIGNMENT_PARASTATS_ABSTRACTCOMPUTATION_H
 #define SOFTENG_751_ASSIGNMENT_PARASTATS_ABSTRACTCOMPUTATION_H
 
-#include <cstring>
 #include <string>
 #include "SummaryStatistics.hpp"
 
@@ -15,7 +14,7 @@ class AbstractComputation {
 public:
     explicit AbstractComputation(const string &fileName);
 
-    virtual void computeData() = 0;
+    virtual SummaryStatistics computeData() = 0;
 
     virtual SummaryStatistics provideProgressUpdate() = 0;
 

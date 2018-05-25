@@ -6,10 +6,13 @@
 #define CL_USE_DEPRECATED_OPENCL_1_2_APIS
 #define NVIDIA
 
+#ifdef WIN32
+#pragma GCC diagnostic ignored "-Wignored-attributes"
+#endif
+
 #ifdef NVIDIA
 #define __CL_ENABLE_EXCEPTIONS
 #define CL_USE_DEPRECATED_OPENCL_1_2_APIS
-#pragma GCC diagnostic ignored "-Wignored-attributes"
 #include "CL/cl.hpp"
 #else
 #define CL_HPP_ENABLE_EXCEPTIONS

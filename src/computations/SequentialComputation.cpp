@@ -1,10 +1,9 @@
-#include <unordered_map>
 #include "SequentialComputation.hpp"
 
 SequentialComputation::SequentialComputation(const string &fileName) : AbstractComputation(fileName) {
 }
 
-void SequentialComputation::computeData() {
+SummaryStatistics SequentialComputation::computeData() {
     ifstream input(_fileName);
 
     unordered_map<double, unsigned long long> occurrences;
@@ -115,6 +114,8 @@ void SequentialComputation::computeData() {
     cout << "Excess kurtosis " << finalStats.getExcessKurtosis() << endl;
     cout << "Upper median " << finalStats.getUpperMedian() << endl;
     cout << "Lower median " << finalStats.getLowerMedian() << endl;
+
+    return _summaryStats;
 }
 
 

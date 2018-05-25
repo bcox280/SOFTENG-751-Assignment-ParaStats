@@ -10,7 +10,6 @@
 
 typedef std::chrono::high_resolution_clock Clock;
 
-
 using namespace std;
 
 void printHelp();
@@ -26,6 +25,7 @@ int main(int argc, char *argv[]) {
     bool parallel = true;
     bool quiet = false;
 
+    // Deals with CLI arguments
     bool inputChangeFlag = false;
     bool outputChangeFlag = false;
     for (int i = 0; i < argc; i++) {
@@ -62,20 +62,17 @@ int main(int argc, char *argv[]) {
         printHelp();
     }
 
-//    auto pt1 = Clock::now();
-//    SequentialComputation sq = SequentialComputation(inputFilename);
-//    sq.computeData();
+    AbstractComputation* computer;
+    if (parallel) {
+        computer = new ParallelComputation(inputFilename);
+    } else {
+        computer =  new SequentialComputation(inputFilename);
+    }
+    auto pt1 = Clock::now(); // Start timer
+    computer->computeData();
+    auto pt2 = Clock::now(); // End timer
 
-//    auto pt2 = Clock::now();
-//    std::cout << "Delta sez t2-t1: "
-//              << std::chrono::duration_cast<std::chrono::nanoseconds>(pt2 - pt1).count() / 1000000
-//              << " milliseconds " << std::endl;
-
-
-    ParallelComputation pr = ParallelComputation(inputFilename);
-    pr.computeData();
-    SummaryStatistics stats = pr.provideProgressUpdate();
-
+    SummaryStatistics stats = computer->provideProgressUpdate();
     // Print results to screen
     printf("Min value = %.17g\n", stats.getMin());
     printf("Max value = %.17g\n", stats.getMax());
@@ -83,6 +80,10 @@ int main(int argc, char *argv[]) {
     printf("Std Dev = %.17g\n", stats.getEstimatedStandardDev());
     printf("Skewness = %.17g\n", stats.getSkewness());
     printf("Kurtosis = %.17g\n", stats.getKurtosis());
+
+    std::cout << "Delta sez t2-t1: "
+              << std::chrono::duration_cast<std::chrono::nanoseconds>(pt2 - pt1).count() / 1000000
+              << " milliseconds " << std::endl;
 
     return 0;
 }
@@ -106,8 +107,4 @@ bool checkOption(string option, string input) {
         return true;
     }
     return false;
-}
-
-void runComputation() {
-
 }

@@ -20,9 +20,9 @@ class ParallelComputation : public AbstractComputation {
 public:
     explicit ParallelComputation(const string &fileName);
 
-    void computeData();
+    SummaryStatistics computeData() override;
 
-    SummaryStatistics provideProgressUpdate();
+    SummaryStatistics provideProgressUpdate() override;
 
     void processOpenCL(std::vector<double>);
 

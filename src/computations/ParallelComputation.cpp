@@ -119,7 +119,7 @@ ParallelComputation::ParallelComputation(const string &fileName) : AbstractCompu
     }
 }
 
-void ParallelComputation::computeData() {
+SummaryStatistics ParallelComputation::computeData() {
 
     const char *valueDelimiter = ",";
     const char *lineDelimiter = "\n";
@@ -131,7 +131,7 @@ void ParallelComputation::computeData() {
         //Create a buffer to read from
         std::streambuf *pFileBuffer = inputStr.rdbuf();
         std::streamsize size = pFileBuffer->pubseekoff(0, inputStr.end);
-        //Change the internal pointer to point back at the start of the file
+        //Change the internal pointer to point back at the start of the filej
         pFileBuffer->pubseekoff(0, inputStr.beg);
         contents = new char[size];
         //Get the sequence of characters specified (whole file) and copy it to contents
@@ -170,6 +170,7 @@ void ParallelComputation::computeData() {
         }
     }
 
+    return _summaryStats;
 }
 
 void ParallelComputation::processOpenCL(std::vector<double> input_vect) {

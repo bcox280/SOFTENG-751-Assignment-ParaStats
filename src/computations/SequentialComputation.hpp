@@ -6,6 +6,7 @@ static const int CHUNK_SIZE = 16384;
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <unordered_map>
 #include <sstream>
 #include <cstring>
 #include <cfloat>
@@ -20,9 +21,9 @@ class SequentialComputation : public AbstractComputation {
 public:
     explicit SequentialComputation(const string &fileName);
 
-    void computeData();
+    SummaryStatistics computeData() override;
 
-    SummaryStatistics provideProgressUpdate();
+    SummaryStatistics provideProgressUpdate() override;
 };
 
 #endif //SOFTENG_751_ASSIGNMENT_PARASTATS_SEQUENTIALCOMPUTATION_H

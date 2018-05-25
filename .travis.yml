@@ -1,9 +1,14 @@
 language: cpp
 sudo: enabled
 before_install:
-- sudo apt update -qq
-- sudo apt install -qq ocl-icd-opencl-dev
-script: cmake -DCMAKE_BUILD_TYPE= -G "CodeBlocks - Unix Makefiles"
+  - sudo apt install -qq ocl-icd-opencl-dev
+script:
+  - wget -O cmake.sh https://cmake.org/files/v3.10/cmake-3.10.3-Linux-x86_64.sh
+  - sudo sh cmake.sh --skip-license --exclude-subdir --prefix=/usr/local
+  - cmake .
+  - make SOFTENG-751-Assignment-ParaStats
+  - make SOFTENG-751-Assignment-ParaStats-Test
+  - ./SOFTENG-751-Assignment-ParaStats-Test
 notifications:
     slack:
         rooms:

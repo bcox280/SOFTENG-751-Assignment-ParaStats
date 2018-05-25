@@ -149,7 +149,7 @@ double SummaryStatistics::getKurtosis() {
 }
 
 double SummaryStatistics::getExcessKurtosis() {
-    return getKurtosis() - 3;
+    return (getKurtosis() - 3);
 }
 
 double SummaryStatistics::getSum() {
