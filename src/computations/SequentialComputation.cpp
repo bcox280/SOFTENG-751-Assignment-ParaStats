@@ -2,11 +2,10 @@
 #include "SequentialComputation.hpp"
 
 SequentialComputation::SequentialComputation(const string &fileName) : AbstractComputation(fileName) {
-    filename = fileName;
 }
 
 void SequentialComputation::computeData() {
-    ifstream input(filename);
+    ifstream input(_fileName);
 
     unordered_map<double, unsigned long long> occurrences;
     unsigned long long completedDataPoints = 0;
@@ -20,7 +19,7 @@ void SequentialComputation::computeData() {
     double upperMedian = 0;
     double lowerMedian = 0;
 
-    std::cout << filename << std::endl;
+    std::cout << _fileName << std::endl;
     for (string line; getline(input, line);) {
         std::stringstream ss(line);
         double value;
@@ -58,7 +57,7 @@ void SequentialComputation::computeData() {
                 newStats.setMax(max);
                 newStats.setMin(min);
                 newStats.setCount(completedDataPoints);
-                summaryStats = newStats;
+                _summaryStats = newStats;
                 // TODO Call the main print SS here
                 dataPointsInChunk = 0;
             }
@@ -91,7 +90,7 @@ void SequentialComputation::computeData() {
     finalStats.setMax(max);
     finalStats.setMin(min);
     finalStats.setCount(completedDataPoints);
-    summaryStats = finalStats;
+    _summaryStats = finalStats;
 
 
     cout << "Count " << finalStats.getCount() << endl;
@@ -120,5 +119,5 @@ void SequentialComputation::computeData() {
 
 
 SummaryStatistics SequentialComputation::provideProgressUpdate() {
-    return SequentialComputation::summaryStats;
+    return SequentialComputation::_summaryStats;
 }

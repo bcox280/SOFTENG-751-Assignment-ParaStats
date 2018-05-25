@@ -6,39 +6,11 @@
 #include <vector>
 #include <sstream>
 #include <cstring>
+#include <memory>
+#include <functional>
+#include "statStructs.hpp"
 #include "AbstractComputation.hpp"
 #include "SummaryStatistics.hpp"
-
-// Add openCL library, declare enable_exceptions
-// NVIDIA yet to support OpenCL 2.0
-#define CL_USE_DEPRECATED_OPENCL_1_2_APIS
-#define NVIDIA
-
-#ifdef NVIDIA
-#define __CL_ENABLE_EXCEPTIONS
-#define CL_USE_DEPRECATED_OPENCL_1_2_APIS
-#pragma GCC diagnostic ignored "-Wignored-attributes"
-#include "CL/cl.hpp"
-#else
-#define CL_HPP_ENABLE_EXCEPTIONS
-#define CL_HPP_TARGET_OPENCL_VERSION 200
-#include "CL/cl2.hpp"
-#endif
-
-typedef struct moments {
-    cl_double m1;
-    cl_double m2;
-    cl_double m3;
-    cl_double m4;
-} __attribute__ ((packed)) moments;
-
-typedef struct rawStats {
-    cl_double min;
-    cl_double max;
-    moments rawMoments;
-} __attribute__ ((packed)) rawStats;
-
-
 
 /**
  * Header file for parallel computation, this class will provide the implementation
@@ -51,6 +23,22 @@ public:
     void computeData();
 
     SummaryStatistics provideProgressUpdate();
+
+    void processOpenCL(std::vector<double>);
+
+private:
+    std::string _stats_src = "../src/kernels/stats.cl"; // Kernel to build
+    cl::Device _device;
+    cl::CommandQueue _queue;
+    cl::Context _context;
+    cl::Kernel _ko_stats;
+    cl::Program _program;
+    std::shared_ptr<cl::make_kernel <cl::Buffer, cl::Buffer, cl::LocalSpaceArg, cl::LocalSpaceArg>> _stats;
+    cl::Buffer _d_output_stats;
+    cl::Buffer _d_input;
+    size_t _work_group_size;
+    size_t _nwork_groups;
+    size_t _input_vect_size = 1024;
 };
 
 #endif //SOFTENG_751_ASSIGNMENT_PARASTATS_PARALLELCOMPUTATION_H

@@ -2,6 +2,7 @@
 #define SOFTENG_751_ASSIGNMENT_PARASTATS_ABSTRACTCOMPUTATION_H
 
 #include <cstring>
+#include <string>
 #include "SummaryStatistics.hpp"
 
 using namespace std;
@@ -17,6 +18,11 @@ public:
     virtual void computeData() = 0;
 
     virtual SummaryStatistics provideProgressUpdate() = 0;
+
+protected:
+    string _fileName;
+
+    SummaryStatistics _summaryStats = SummaryStatistics();
 };
 
 #endif //SOFTENG_751_ASSIGNMENT_PARASTATS_ABSTRACTCOMPUTATION_H

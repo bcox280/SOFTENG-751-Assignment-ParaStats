@@ -74,6 +74,15 @@ int main(int argc, char *argv[]) {
 
     ParallelComputation pr = ParallelComputation(inputFilename);
     pr.computeData();
+    SummaryStatistics stats = pr.provideProgressUpdate();
+
+    // Print results to screen
+    printf("Min value = %.17g\n", stats.getMin());
+    printf("Max value = %.17g\n", stats.getMax());
+    printf("Mean = %.17g\n", stats.getMean());
+    printf("Std Dev = %.17g\n", stats.getEstimatedStandardDev());
+    printf("Skewness = %.17g\n", stats.getSkewness());
+    printf("Kurtosis = %.17g\n", stats.getKurtosis());
 
     return 0;
 }

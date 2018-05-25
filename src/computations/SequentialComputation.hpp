@@ -23,11 +23,6 @@ public:
     void computeData();
 
     SummaryStatistics provideProgressUpdate();
-
-private:
-    string filename;
-
-    SummaryStatistics summaryStats = SummaryStatistics();
 };
 
 #endif //SOFTENG_751_ASSIGNMENT_PARASTATS_SEQUENTIALCOMPUTATION_H

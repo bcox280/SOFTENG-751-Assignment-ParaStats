@@ -1,18 +1,29 @@
 #ifndef SOFTENG_751_ASSIGNMENT_PARASTATS_SUMMARYSTATISTICS_H
 #define SOFTENG_751_ASSIGNMENT_PARASTATS_SUMMARYSTATISTICS_H
 
+#include <cmath>
+#include <algorithm>
+#include <cfloat>
+#include "statStructs.hpp"
+
 /**
  * This class will be used as a structure to keep the statistics from the data,
  * this will be used both for final statistics, and progression of statistics.
  */
 class SummaryStatistics {
 private:
-    double m2, m3, m4, min, max, upperMedian, lowerMedian;
-    double m1 = m2 = m3 = m4 = min = max = upperMedian = lowerMedian = 0;
+    double m2, m3, m4, upperMedian, lowerMedian;
+    double m1 = m2 = m3 = m4 = upperMedian = lowerMedian = 0;
+    double min = DBL_MAX;
+    double max = -DBL_MAX;
     unsigned long long count = 0;
     std::vector<double> modes;
 public:
     SummaryStatistics();
+
+    void updateStats(rawStats stats, size_t count);
+
+    void updateMoments(moments rawMoments, size_t count);
 
     double getM1() const;
 
@@ -48,13 +59,19 @@ public:
 
     void setMin(double min);
 
+    void updateMin(double min);
+
     double getMax() const;
 
     void setMax(double max);
 
+    void updateMax(double max);
+
     unsigned long long getCount() const;
 
     void setCount(unsigned long long count);
+
+    void updateCount(size_t count);
 
     double getVariance();
 
@@ -71,6 +88,8 @@ public:
     double getExcessKurtosis();
 
     double getSum();
+
+    double getMean();
 };
 
 #endif //SOFTENG_751_ASSIGNMENT_PARASTATS_SUMMARYSTATISTICS_H
