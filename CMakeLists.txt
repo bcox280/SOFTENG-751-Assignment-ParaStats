@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.2)
 
 # Define project name
 project (SOFTENG-751-Assignment-ParaStats)
