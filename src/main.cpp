@@ -2,109 +2,107 @@
 #include <vector>
 #include <sstream>
 #include <cstring>
+#include <fstream>
+#include <chrono>
 #include "ParallelComputation.cpp"
 #include "SequentialComputation.cpp"
 #include "SummaryStatistics.cpp"
 #include "AbstractComputation.cpp"
-#include <chrono>
+#include "CommandLineInterface.cpp"
+#include "ExitException.cpp"
 
 typedef std::chrono::high_resolution_clock Clock;
 
 using namespace std;
 
-void printHelp();
+// TODO Fix reading input file and try to standardise
+// TODO Try compiling with -O3
+// TODO Create a TravisCI Equivalent test script for winDOS and *nix OS -> possibly get travis to run the same script
+// TODO Document how to setup winDOS or *nix to compile and run the application
+// TODO FileReader testing via reading in, printing and and comparing hashcodes
 
-void printVersion(string version);
-
-bool checkOption(string option, string input);
+void printResultsToCsvFile(SummaryStatistics finalStatistics, string *outputFilename);
 
 int main(int argc, char *argv[]) {
-    const string version("beta");
-    string outputFilename("results.txt");
-    string inputFilename("../data/voltage_normal_10240000.csv");
-    bool parallel = true;
-    bool quiet = false;
-
-    // Deals with CLI arguments
-    bool inputChangeFlag = false;
-    bool outputChangeFlag = false;
-    for (int i = 0; i < argc; i++) {
-        if (inputChangeFlag) {
-            inputChangeFlag = false;
-            if (checkOption("i", argv[i - 1])) {
-                inputFilename = argv[i];
-            }
-        } else if (outputChangeFlag) {
-            outputChangeFlag = false;
-            if (checkOption("o", argv[i - 1])) {
-                outputFilename = argv[i];
-            }
-        } else {
-            if (checkOption("h", argv[i])) {
-                printHelp();
-                return 0;
-            } else if (checkOption("v", argv[i])) {
-                printVersion(version);
-                return 0;
-            } else if (checkOption("q", argv[i])) {
-                quiet = true;
-            } else if (checkOption("s", argv[i])) {
-                parallel = false;
-            } else if (checkOption("i", argv[i])) {
-                inputChangeFlag = true;
-            } else if (checkOption("o", argv[i])) {
-                outputChangeFlag = true;
-            }
-        }
-    }
-
-    if (argc == 0) {
-        printHelp();
+    CommandLineInterface *cli;
+    try {
+        cli = new CommandLineInterface(argc, argv);
+    } catch (ExitException &exception) {
+        return 0;
     }
 
     AbstractComputation* computer;
-    if (parallel) {
-        computer = new ParallelComputation(inputFilename);
+    if (cli->runInParallel()) {
+        computer = new ParallelComputation(cli->inputFilename());
     } else {
-        computer =  new SequentialComputation(inputFilename);
+        computer = new SequentialComputation(cli->inputFilename());
     }
-    auto pt1 = Clock::now(); // Start timer
-    computer->computeData();
-    auto pt2 = Clock::now(); // End timer
 
-    SummaryStatistics stats = computer->provideProgressUpdate();
-    // Print results to screen
-    printf("Min value = %.17g\n", stats.getMin());
-    printf("Max value = %.17g\n", stats.getMax());
-    printf("Mean = %.17g\n", stats.getMean());
-    printf("Std Dev = %.17g\n", stats.getEstimatedStandardDev());
-    printf("Skewness = %.17g\n", stats.getSkewness());
-    printf("Kurtosis = %.17g\n", stats.getKurtosis());
+    auto initialTime = Clock::now(); // Start timer
+    SummaryStatistics finalStatistics = computer->computeData();
+    auto finalTime = Clock::now(); // End timer
 
-    std::cout << "Delta sez t2-t1: "
-              << std::chrono::duration_cast<std::chrono::nanoseconds>(pt2 - pt1).count() / 1000000
-              << " milliseconds " << std::endl;
+    // TODO Print out statistics as they're being calculated
+
+    cli->printResults(finalStatistics);
+
+    cli->printRuntime(initialTime, finalTime);
+
+    if (cli->printToFile()) {
+        printResultsToCsvFile(finalStatistics, cli->outputFilename());
+    }
 
     return 0;
 }
 
-void printHelp() {
-    cout << "=== ParaStats Help ==" << endl;
-    cout << "-o outputFileName" << endl;
-    cout << "-i inputFileName" << endl;
-    cout << "-h help" << endl;
-    cout << "-s sequential mode" << endl;
-    cout << "-v version" << endl;
-    cout << "-q quiet" << endl;
-}
-
-void printVersion(string version) {
-    cout << version << endl;
-}
-
-bool checkOption(string option, string input) {
-    if (input.compare("/" + option) == 0 || input.compare("-" + option) == 0) {
-        return true;
+// TODO Share this code and CLI printing in one object that just takes a stream
+void printResultsToCsvFile(SummaryStatistics finalStatistics, string *outputFilename) {
+    std::ofstream outputFile(*outputFilename);
+    if (finalStatistics.getModes().empty()) {
+        outputFile << "Mode(s)" << "," << endl;
     }
-    return false;
+    outputFile << "Count" << ","
+               << "Mean" << ","
+               << "Median (financial)" << ","
+               << "Min" << ","
+               << "Max" << ","
+               << "Estimated variance" << ","
+               << "Estimated standard deviation" << ","
+               << "Skewness" << ","
+               << "Kurtosis (normal)" << ","
+               << "Sum" << ","
+               << "2nd moment" << ","
+               << "3rd moment" << ","
+               << "4th moment" << ","
+               << "Standard deviation" << ","
+               << "Variance" << ","
+               << "Excess kurtosis" << ","
+               << "Upper median" << ","
+               << "Lower median" << std::endl;
+    outputFile << std::scientific;
+    if (finalStatistics.getModes().empty()) {
+        outputFile << finalStatistics.getModes().at(0) << "," << endl;
+    }
+    outputFile << finalStatistics.getCount() << ","
+            << finalStatistics.getM1() << ","
+            << finalStatistics.getFinancialMedian() << ","
+            << finalStatistics.getMin() << ","
+            << finalStatistics.getMax() << ","
+            << finalStatistics.getEstimatedVariance() << ","
+            << finalStatistics.getEstimatedStandardDev() << ","
+            << finalStatistics.getSkewness() << ","
+            << finalStatistics.getKurtosis() << ","
+            << finalStatistics.getSum() << ","
+            << finalStatistics.getM2() << ","
+            << finalStatistics.getM3() << ","
+            << finalStatistics.getM4() << ","
+            << finalStatistics.getStandardDev() << ","
+            << finalStatistics.getVariance() << ","
+            << finalStatistics.getExcessKurtosis() << ","
+            << finalStatistics.getUpperMedian() << ","
+            << finalStatistics.getLowerMedian() << endl;
+    for (unsigned long long int mode = 1; mode < finalStatistics.getModes().size(); mode++) {
+        cout << finalStatistics.getModes().at(mode) << endl;
+    }
+    outputFile.close();
 }

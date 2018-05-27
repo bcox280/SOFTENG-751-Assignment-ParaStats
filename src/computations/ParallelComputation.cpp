@@ -131,7 +131,7 @@ SummaryStatistics ParallelComputation::computeData() {
         //Create a buffer to read from
         std::streambuf *pFileBuffer = inputStr.rdbuf();
         std::streamsize size = pFileBuffer->pubseekoff(0, inputStr.end);
-        //Change the internal pointer to point back at the start of the filej
+        //Change the internal pointer to point back at the start of the file
         pFileBuffer->pubseekoff(0, inputStr.beg);
         contents = new char[size];
         //Get the sequence of characters specified (whole file) and copy it to contents

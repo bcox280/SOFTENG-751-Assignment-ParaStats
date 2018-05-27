@@ -18,7 +18,6 @@ SummaryStatistics SequentialComputation::computeData() {
     double upperMedian = 0;
     double lowerMedian = 0;
 
-    std::cout << _fileName << std::endl;
     for (string line; getline(input, line);) {
         std::stringstream ss(line);
         double value;
@@ -92,28 +91,7 @@ SummaryStatistics SequentialComputation::computeData() {
     _summaryStats = finalStats;
 
 
-    cout << "Count " << finalStats.getCount() << endl;
-    cout << "Mean " << finalStats.getM1() << endl;
-    cout << "Mode(s) ";
-    for (double mode : finalStats.getModes())
-        std::cout << mode << ',';
-    cout << endl;
-    cout << "Median (financial) " << finalStats.getFinancialMedian() << endl;
-    cout << "Min " << finalStats.getMin() << endl;
-    cout << "Max " << finalStats.getMax() << endl;
-    cout << "Estimated variance " << finalStats.getEstimatedVariance() << endl;
-    cout << "Estimated standard deviation " << finalStats.getEstimatedStandardDev() << endl;
-    cout << "Skewness " << finalStats.getSkewness() << endl;
-    cout << "Kurtosis (normal) " << finalStats.getKurtosis() << endl;
-    cout << "Sum " << finalStats.getSum() << endl;
-    cout << "2nd moment " << finalStats.getM2() << endl;
-    cout << "3rd moment " << finalStats.getM3() << endl;
-    cout << "4th moment " << finalStats.getM4() << endl;
-    cout << "Standard deviation " << finalStats.getStandardDev() << endl;
-    cout << "Variance " << finalStats.getVariance() << endl;
-    cout << "Excess kurtosis " << finalStats.getExcessKurtosis() << endl;
-    cout << "Upper median " << finalStats.getUpperMedian() << endl;
-    cout << "Lower median " << finalStats.getLowerMedian() << endl;
+
 
     return _summaryStats;
 }

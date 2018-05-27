@@ -21,8 +21,9 @@ set(SOURCE_FILES
         src/main.cpp
         src/kernels
         src/statistics
-        src/computations)
-include_directories(src/computations src/statistics)
+        src/computations
+        src/interfaces)
+include_directories(src/computations src/statistics src/interfaces)
 
 # Compiler flags
 set(CMAKE_CXX_STANDARD 17)

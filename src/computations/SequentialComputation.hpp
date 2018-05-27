@@ -8,7 +8,7 @@ static const int CHUNK_SIZE = 16384;
 #include <vector>
 #include <unordered_map>
 #include <sstream>
-#include <cstring>
+#include <string>
 #include <cfloat>
 #include "AbstractComputation.hpp"
 #include "SummaryStatistics.hpp"

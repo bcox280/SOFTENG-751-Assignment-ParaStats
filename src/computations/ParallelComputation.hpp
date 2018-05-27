@@ -5,7 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-#include <cstring>
+#include <string>
 #include <memory>
 #include <functional>
 #include "statStructs.hpp"
