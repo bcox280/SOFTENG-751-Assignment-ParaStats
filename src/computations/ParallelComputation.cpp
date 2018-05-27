@@ -140,6 +140,9 @@ SummaryStatistics ParallelComputation::computeData() {
 
         int count = 0;
         std::vector<double> input_vector;
+        for (int i = 0; i < _input_vect_size; i++) {
+            input_vector.push_back(0);
+        }
         for (;; contents = nullptr) {
             //Split each chunk on a new line, while keeping the location of where the pointer is
             line = strtok_r(contents, lineDelimiter, &ptrContents);
@@ -157,11 +160,13 @@ SummaryStatistics ParallelComputation::computeData() {
                 if (count == _input_vect_size) {
                     processOpenCL(input_vector);
                     count = 0;
-                    input_vector.clear();
                 }
-                input_vector.push_back(stod(indValue));
+                input_vector[count] = (stod(indValue));
                 count++;
             }
+        }
+        if (count == _input_vect_size) {
+            processOpenCL(input_vector);
         }
         delete[] contents;
     }
