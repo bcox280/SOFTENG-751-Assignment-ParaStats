@@ -7,7 +7,7 @@ ParallelComputation::ParallelComputation(const string &fileName) : AbstractCompu
          * Step 1: Select device and create context and queue
          */
         // TODO: Implement choosing of devices from commandline arguments
-        cl_uint deviceIndex; // 0 for CPU, 1 for GPU if available
+        cl_uint deviceIndex;
 
         // Get list of platforms
         std::vector<cl::Platform> platforms;
@@ -20,9 +20,9 @@ ParallelComputation::ParallelComputation(const string &fileName) : AbstractCompu
             platform.getDevices(CL_DEVICE_TYPE_ALL, &plat_devices);
             devices.insert(devices.end(), plat_devices.begin(), plat_devices.end());
         }
-        string user_input = "";
+        string user_input;
         // Get list of devices
-        unsigned long numDevices = devices.size();
+        unsigned long long int numDevices = devices.size();
         cout << numDevices << " devices found!" << endl;
 
         // Get device name
@@ -108,8 +108,6 @@ ParallelComputation::ParallelComputation(const string &fileName) : AbstractCompu
             _nwork_groups = _device.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
             _work_group_size = _input_vect_size / _nwork_groups;
         }
-        // DEBUG: Work group/item sizes
-        cout << _nwork_groups << " work groups, " << _work_group_size << " work items per group" << endl << endl;
 
         // Declare output buffer
         _d_output_stats = cl::Buffer(_context, CL_MEM_WRITE_ONLY, sizeof(rawStats)*_nwork_groups);
@@ -124,16 +122,17 @@ SummaryStatistics ParallelComputation::computeData() {
     const char *valueDelimiter = ",";
     const char *lineDelimiter = "\n";
 
-    char *contents, *line, *indValue, *ptrContents, *ptrLine;
+    char *contents, *line, *indValue, *ptrContents;
     std::ifstream inputStr(_fileName);
 
     if (inputStr) {
         //Create a buffer to read from
-        std::streambuf *pFileBuffer = inputStr.rdbuf();
-        std::streamsize size = pFileBuffer->pubseekoff(0, inputStr.end);
+        std::streambuf* pFileBuffer = inputStr.rdbuf();
+        std::streamsize size = pFileBuffer->pubseekoff(0, std::ifstream::end);
         //Change the internal pointer to point back at the start of the file
-        pFileBuffer->pubseekoff(0, inputStr.beg);
+        pFileBuffer->pubseekoff(0, std::ifstream::beg);
         contents = new char[size];
+
         //Get the sequence of characters specified (whole file) and copy it to contents
         pFileBuffer->sgetn(contents, size);
         //Close the stream
@@ -141,33 +140,30 @@ SummaryStatistics ParallelComputation::computeData() {
 
         int count = 0;
         std::vector<double> input_vector;
-        for (int j = 1;; j++, contents = nullptr) {
+        for (;; contents = nullptr) {
             //Split each chunk on a new line, while keeping the location of where the pointer is
             line = strtok_r(contents, lineDelimiter, &ptrContents);
             //If its a null pointer, end is found
             if (line == nullptr) {
                 break;
             }
-
-            // TODO Send off chunk to a worker thread
-
             for (;; line = nullptr) {
                 //Split each line into individual values, while keeping the location of where the pointer is in the line
-                indValue = strtok_r(line, valueDelimiter, &ptrLine);
+                indValue = strtok(line, valueDelimiter);
                 //If the value is not a null pointer we can add it to the vector, else we have reached the end of the line
-                if (indValue != nullptr) {
-                    count++;
-                    input_vector.push_back(stod(indValue));
-                    if (count == _input_vect_size) {
-                        processOpenCL(input_vector);
-                        count = 0;
-                        input_vector.clear();
-                    }
-                } else {
+                if (indValue == nullptr) {
                     break;
                 }
+                if (count == _input_vect_size) {
+                    processOpenCL(input_vector);
+                    count = 0;
+                    input_vector.clear();
+                }
+                input_vector.push_back(stod(indValue));
+                count++;
             }
         }
+        delete[] contents;
     }
 
     return _summaryStats;
