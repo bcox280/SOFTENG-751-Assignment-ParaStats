@@ -58,51 +58,56 @@ int main(int argc, char *argv[]) {
 // TODO Share this code and CLI printing in one object that just takes a stream
 void printResultsToCsvFile(SummaryStatistics finalStatistics, string *outputFilename) {
     std::ofstream outputFile(*outputFilename);
-    if (finalStatistics.getModes().empty()) {
-        outputFile << "Mode(s)" << "," << endl;
-    }
+
+//    if (finalStatistics.getModes().empty()) {
+//        outputFile << "Mode(s)" << ",";
+//    }
     outputFile << "Count" << ","
-               << "Mean" << ","
-               << "Median (financial)" << ","
-               << "Min" << ","
-               << "Max" << ","
-               << "Estimated variance" << ","
-               << "Estimated standard deviation" << ","
-               << "Skewness" << ","
-               << "Kurtosis (normal)" << ","
-               << "Sum" << ","
-               << "2nd moment" << ","
-               << "3rd moment" << ","
-               << "4th moment" << ","
-               << "Standard deviation" << ","
-               << "Variance" << ","
-               << "Excess kurtosis" << ","
-               << "Upper median" << ","
-               << "Lower median" << std::endl;
+                << "Min" << ","
+                << "Max" << ","
+                << "Mean" << ","
+                << "Standard deviation" << ","
+                << "Variance" << ","
+                << "Skewness" << ","
+                << "Kurtosis" << ","
+                << "Sum"
+//               << "Median (financial)" << ","
+//               << "Estimated variance" << ","
+//               << "Estimated standard deviation" << ","
+//               << "2nd moment" << ","
+//               << "3rd moment" << ","
+//               << "4th moment" << ","
+//               << "Excess kurtosis" << ","
+//               << "Upper median" << ","
+//               << "Lower median"
+                << std::endl;
+
     outputFile << std::scientific;
-    if (finalStatistics.getModes().empty()) {
-        outputFile << finalStatistics.getModes().at(0) << "," << endl;
-    }
+//    if (finalStatistics.getModes().empty()) {
+//        outputFile << finalStatistics.getModes().at(0) << "," << endl;
+//    }
     outputFile << finalStatistics.getCount() << ","
-            << finalStatistics.getM1() << ","
-            << finalStatistics.getFinancialMedian() << ","
             << finalStatistics.getMin() << ","
             << finalStatistics.getMax() << ","
-            << finalStatistics.getEstimatedVariance() << ","
-            << finalStatistics.getEstimatedStandardDev() << ","
-            << finalStatistics.getSkewness() << ","
-            << finalStatistics.getKurtosis() << ","
-            << finalStatistics.getSum() << ","
-            << finalStatistics.getM2() << ","
-            << finalStatistics.getM3() << ","
-            << finalStatistics.getM4() << ","
+            << finalStatistics.getM1() << ","
             << finalStatistics.getStandardDev() << ","
             << finalStatistics.getVariance() << ","
-            << finalStatistics.getExcessKurtosis() << ","
-            << finalStatistics.getUpperMedian() << ","
-            << finalStatistics.getLowerMedian() << endl;
-    for (unsigned long long int mode = 1; mode < finalStatistics.getModes().size(); mode++) {
-        cout << finalStatistics.getModes().at(mode) << endl;
-    }
+            << finalStatistics.getSkewness() << ","
+            << finalStatistics.getKurtosis() << ","
+            << finalStatistics.getSum()
+//            << finalStatistics.getFinancialMedian() << ","
+//            << finalStatistics.getEstimatedVariance() << ","
+//            << finalStatistics.getEstimatedStandardDev() << ","
+//            << finalStatistics.getM2() << ","
+//            << finalStatistics.getM3() << ","
+//            << finalStatistics.getM4() << ","
+//            << finalStatistics.getExcessKurtosis() << ","
+//            << finalStatistics.getUpperMedian() << ","
+//            << finalStatistics.getLowerMedian() << endl;
+//    for (unsigned long long int mode = 1; mode < finalStatistics.getModes().size(); mode++) {
+//        cout << finalStatistics.getModes().at(mode) << endl;
+//    }
+            << std::endl;
+
     outputFile.close();
 }

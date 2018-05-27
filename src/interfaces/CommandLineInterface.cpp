@@ -67,7 +67,7 @@ void CommandLineInterface::printSeparatorLine() {
 
 void CommandLineInterface::printRuntime(std::chrono::system_clock::time_point initialTime,
                                         std::chrono::system_clock::time_point finalTime) {
-    std::cout << "Delta sez t2-t1: "
+    std::cout << "Calculating the statistical values took: "
               << std::chrono::duration_cast<std::chrono::nanoseconds>(finalTime - initialTime).count() /
                  NANO_TO_MILLI_SECONDS
               << " milliseconds " << std::endl;
@@ -77,11 +77,11 @@ void CommandLineInterface::printResults(SummaryStatistics summaryStatistics) {
     cout << std::scientific;
     cout << "Count " << summaryStatistics.getCount() << endl;
     cout << "Mean " << summaryStatistics.getM1() << endl;
-    cout << "Mode(s) ";
-    for (double mode : summaryStatistics.getModes())
-        std::cout << mode << ',';
-    cout << endl;
-    cout << "Median (financial) " << summaryStatistics.getFinancialMedian() << endl;
+//    cout << "Mode(s) ";
+//    for (double mode : summaryStatistics.getModes())
+//        std::cout << mode << ',';
+//    cout << endl;
+//    cout << "Median (financial) " << summaryStatistics.getFinancialMedian() << endl;
     cout << "Min " << summaryStatistics.getMin() << endl;
     cout << "Max " << summaryStatistics.getMax() << endl;
     cout << "Estimated variance " << summaryStatistics.getEstimatedVariance() << endl;
@@ -95,8 +95,8 @@ void CommandLineInterface::printResults(SummaryStatistics summaryStatistics) {
     cout << "Standard deviation " << summaryStatistics.getStandardDev() << endl;
     cout << "Variance " << summaryStatistics.getVariance() << endl;
     cout << "Excess kurtosis " << summaryStatistics.getExcessKurtosis() << endl;
-    cout << "Upper median " << summaryStatistics.getUpperMedian() << endl;
-    cout << "Lower median " << summaryStatistics.getLowerMedian() << endl;
+//    cout << "Upper median " << summaryStatistics.getUpperMedian() << endl;
+//    cout << "Lower median " << summaryStatistics.getLowerMedian() << endl;
 }
 
 void CommandLineInterface::printVersion() {
