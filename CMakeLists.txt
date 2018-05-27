@@ -5,6 +5,7 @@ project (SOFTENG-751-Assignment-ParaStats)
 
 # Include OpenCL includes
 if (WIN32)
+    set(CMAKE_CXX_FLAGS "-static -static-libgcc -static-libstdc++")
     #Specify location of new method to find OpenCL
     set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/")
 
