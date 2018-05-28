@@ -3,7 +3,7 @@ __Parallel computation of statistical values__
 
 [![Build Status](https://travis-ci.com/mkem114/SOFTENG-751-Assignment-ParaStats.svg?token=4tn5PhULbqssssJGM5Gs&branch=master)](https://travis-ci.com/mkem114/SOFTENG-751-Assignment-ParaStats)
 
-When working with data sets created from natural processes, it is often important to get statistical values for these datasets. This assignment implements the calculation of statistical values over large data sets in parallel. The algorithms are implemented in OpenCL (Open Computing Language), a (low level) language based on C (C99) and an API for implementing high performance and parallel computing code. OpenCL's goal is to be cross platform, in particular for the programming of acceleration units, such as graphics cards (GPUs) or FPGAs. Specifically we have implemented and accelerate the calculation of statistical values for large input data sets.
+When working with data sets created from natural processes, it is often important to get statistical values for these data-sets. This assignment implements the calculation of statistical values over large data sets in parallel. The algorithms are implemented in OpenCL (Open Computing Language), a (low level) language based on C (C99) and an API for implementing high performance and parallel computing code. OpenCL's goal is to be cross platform, in particular for the programming of acceleration units, such as graphics cards (GPUs) or FPGAs. Specifically we have implemented and accelerate the calculation of statistical values for large input data sets.
 
 ### Authors
 - Blair Cox (bcox280)
@@ -21,14 +21,14 @@ You will need to install a runtime, and implementation of OpenCL:
 - You'll need a loader; "ocl-icd-libopencl1" on Debian-based systems, "libOpenCL1" on OpenSuse-based systems, "ocl-icd" for Arch-based systems
 - NVIDIA devices, install "nvidia-XXX" drivers for Debian-based systems, "opencl-nvidia" for Arch-based systems
 - AMD devices, (untested), install "opencl-mesa" on Arch-based systems
-- Intel devices, "intel-opencl-runtime" and "beignet" on Arch-based sytems
+- Intel devices, "intel-opencl-runtime" and "beignet" on Arch-based systems
 - To check which OpenCL device implementations are currently on your system, "ls /etc/OpenCL/vendors" (you'll need at least 1 for running the OpenCL implementation)
 ##### Windows (tested)
 - Install the relevant OpenCL runtimes/drivers for your devices from their websites
-- The provided exectuable (under releases) works on UG4 windows installation, you'll need to source the OpenCL.dll (from your device driver), or find one online.
+- The provided executable (under releases) works on UG4 windows installation, you'll need to source the OpenCL.dll (from your device driver), or find one online.
 ##### Why won't it run?
 - Make sure you have the /src/kernels folder, this contains the critical OpenCL kernel(s)
-- Make sure the exectuables are in the /bin folder
+- Make sure the executables are in the /bin folder
 - Make sure the sample data files (if you're using them) are in the /data folder
 
 ### Compiling
