@@ -1,9 +1,12 @@
 #include "CommandLineInterface.hpp"
 
 CommandLineInterface::CommandLineInterface(int numberOfArguments, char* arguments[]) {
+    _inputVectorSize = 1024;
+
     // Deals with CLI arguments
     bool inputChangeFlag = false;
     bool outputChangeFlag = false;
+    bool vectorChangeFlag = false;
     for (int i = 0; i < numberOfArguments; i++) {
         if (inputChangeFlag) {
             inputChangeFlag = false;
@@ -14,6 +17,18 @@ CommandLineInterface::CommandLineInterface(int numberOfArguments, char* argument
             outputChangeFlag = false;
             if (checkOption("o", arguments[i - 1])) {
                 _outputFilename = arguments[i];
+            }
+        } else if (vectorChangeFlag) {
+            vectorChangeFlag = false;
+            if (checkOption("z", arguments[i - 1])) {
+                size_t vector;
+                try {
+                    vector = stoi(arguments[i]);
+                } catch(...) {
+                    cout << "Please enter a valid input vector size" << endl;
+                    throw ExitException();
+                }
+                _inputVectorSize = vector;
             }
         } else {
             if (checkOption("h", arguments[i])) {
@@ -30,6 +45,8 @@ CommandLineInterface::CommandLineInterface(int numberOfArguments, char* argument
                 _parallel = true;
             } else if (checkOption("i", arguments[i])) {
                 inputChangeFlag = true;
+            } else if (checkOption("z", arguments[i])) {
+                vectorChangeFlag = true;
             } else if (checkOption("o", arguments[i])) {
                 outputChangeFlag = true;
                 _printToFile = true;
@@ -59,6 +76,10 @@ CommandLineInterface::CommandLineInterface(int numberOfArguments, char* argument
         }
         printSeparatorLine();
     }
+}
+
+size_t CommandLineInterface::userVectorSize() {
+    return _inputVectorSize;
 }
 
 void CommandLineInterface::printSeparatorLine() {
@@ -123,6 +144,7 @@ void CommandLineInterface::printHelp() {
     cout << "\tParaStats -p" << endl;
     cout << "\tParaStats -v" << endl;
     cout << "\tParaStats -q" << endl;
+    cout << "\tParaStats -z <input vector size>" << endl;
     cout << "Options:" << endl;
     cout << "\t-o Change the output file name." << endl;
     cout << "\t-i Change the input  file name." << endl;
@@ -131,6 +153,7 @@ void CommandLineInterface::printHelp() {
     cout << "\t-p Calculate using the OpenCL implementation." << endl;
     cout << "\t-v Show version." << endl;
     cout << "\t-q Run in quiet mode." << endl;
+    cout << "\t-z Change the input vector size for the device." << endl;
 }
 
 bool CommandLineInterface::checkOption(string option, string input) {

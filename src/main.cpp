@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 
     AbstractComputation* computer;
     if (cli->runInParallel()) {
-        computer = new ParallelComputation(cli->inputFilename());
+        computer = new ParallelComputation(cli->inputFilename(), cli->userVectorSize());
     } else {
         computer = new SequentialComputation(cli->inputFilename());
     }

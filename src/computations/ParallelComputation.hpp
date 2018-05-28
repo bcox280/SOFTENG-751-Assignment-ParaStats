@@ -18,9 +18,11 @@
  */
 class ParallelComputation : public AbstractComputation {
 public:
-    explicit ParallelComputation(const string &fileName);
+    ParallelComputation(const string &fileName, bool defaultDevice, size_t inputVectorSize);
 
     ParallelComputation(const string &fileName, bool defaultDevice);
+
+    ParallelComputation(const string &fileName, size_t inputVectorSize);
 
     SummaryStatistics computeData() override;
 

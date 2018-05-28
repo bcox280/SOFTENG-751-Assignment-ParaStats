@@ -1,6 +1,7 @@
 #include "ParallelComputation.hpp"
 
-ParallelComputation::ParallelComputation(const string &fileName, bool defaultDevice) : AbstractComputation(fileName) {
+ParallelComputation::ParallelComputation(const string &fileName, bool defaultDevice, size_t inputVectorSize) : AbstractComputation(fileName) {
+    _input_vect_size = inputVectorSize;
     // Catch OpenCL errors
     try {
         /************************
@@ -124,8 +125,12 @@ ParallelComputation::ParallelComputation(const string &fileName, bool defaultDev
     }
 }
 
-ParallelComputation::ParallelComputation(const string &fileName)
-        : ParallelComputation::ParallelComputation(fileName, false) {
+ParallelComputation::ParallelComputation(const string &fileName, bool defaultDevice)
+        : ParallelComputation::ParallelComputation(fileName, defaultDevice, 1024) {
+}
+
+ParallelComputation::ParallelComputation(const string &fileName, size_t inputVectorSize)
+        : ParallelComputation::ParallelComputation(fileName, false, inputVectorSize) {
 }
 
 SummaryStatistics ParallelComputation::computeData() {

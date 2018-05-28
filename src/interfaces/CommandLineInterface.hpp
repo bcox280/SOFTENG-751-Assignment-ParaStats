@@ -20,6 +20,8 @@ public:
 
     bool printToFile();
 
+    size_t userVectorSize();
+
     string *outputFilename();
 
     void printRuntime(std::chrono::system_clock::time_point initialTime,
@@ -34,6 +36,7 @@ private:
     bool _parallel = true;
     bool _quiet = false;
     bool _printToFile = false;
+    size_t _inputVectorSize;
 
     void printHelp();
 
