@@ -1,0 +1,51 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Implementation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Implementation}
+
+% IMPLEMENTATION
+\subsection{Sequential} 
+We attempted to make the sequential implementation as fast as possible to give a valid comparison to the OpenCL version; this would show if the OpenCL implementation was worth the effort.
+
+\subsubsection{Optimisations}
+Our implementation uses an online algorithm to calculate the core values on every data point, this retains numerical accuracy and is the same speed as the `chunked' version (even correctly tuned for the cache). Partial calculations are reused to determine more than one core statistical value to reduce operations. The current value of the statistical values is only updated in chunks to reduce overhead.
+
+\subsubsection{Implementation}
+\begin{listing}[H]
+\inputminted{python}{sequential.py}
+\caption{The equations mentioned above were implemented in the incremental case}
+\label{sequential:3}
+\end{listing}
+
+\subsection{Parallel}
+\subsubsection{Kernel}
+We reduced all our statistical calculations down to one kernel. One kernel allows for a lesser amount of overhead when transferring data to and from the host, which would increase the overall efficiency of our implementation. Minimum, maximum and all the moments are calculated in a singular kernel with a reduction based for loop with different strides for efficient and concurrent calculations. Barriers are used in assistance to strides to allow the kernel to execute without issues with concurrency. This kernel operates using the data parallelism approach as each data point is operated on by a different compute unit. The kernel is only compiled once but can be run multiple times in `chunks' when the data size exceeds the supported size of the device.
+
+\subsubsection{Optimisations}
+When we were finished implementing the base statistics in the \texttt{stats.cl} kernel, we looked at optimising the calculations to reduce the number of operations, and to reduce the total memory used. Reducing space was vital as it allowed for more memory to be used on other statistical value storage, and reducing calculations decreased the time taken to calculate each statistical value, hence increasing speed up overall.
+
+\paragraph{Data Transfer and Memory}
+In order to increase the throughput of data transfer, we had to reduce both allocated memory on devices, and data transferred into buffers. These two are intertwined as reducing one, allows the other to increase. Being able to increase the rate of data transfer is important as it provides an increase in the work group size and amount of work groups that could be transferred. Therefore by implementing this optimisation technique, larger vectors could be transferred onto the input buffer, so that more data could be processed in parallel, with less transfer time overhead.\\
+
+An example of when we executed this technique was min/max reduction and calculation, as can be seen in listing \ref{parallel:1}. Initially, we had both minimum and maximum being calculated in separate arrays, being reduced down to one work item per work group at the end. This process meant that one array was needed for both minimum and maximum, and required more memory to hold. What we did to solve this was to reduce and calculate on the first iteration, and max/min would naturally separate the maximum and minimum values. Once this was done, maximum and minimum calculations could be done on separate sections of the array, without having to worry about concurrent access.\\
+
+\begin{listing}[ht]
+\inputminted{c++}{maxmin.cpp}
+\vspace{-16pt}
+\caption{Work item calculation splitting over min and max}
+\label{parallel:1}
+\end{listing}
+
+The moments structure is an array of structures, but its length only requires half the amount of memory for the whole array, compared with the input array. It is able to be constructed like this as the initial moment calculation is done on the original array (min/max array), and reduced down to half of the total work group size instantly, onto this structure.\\
+
+\paragraph{Calculations}
+As stated above, we reduced the number of calculations by doing the first minimum and maximum calculation together. Another way we reduced calculations was to minimise the amount divisions used, as divisions can be rather expensive. When reducing down, we also made sure that as many work items would still be doing work, this would help increase occupancy and decrease downtime of work-items hence increasing overall speed.
+
+\subsection{File Reading}
+File reading was a common functionality that was needed between the parallel and sequential implementation. It was essential that both sequential and parallel used the same file reading process as it would help isolate the speedup between calculations, and not reading files. When dealing with large files, it is inefficient to read a file fully into memory and needs to be buffered in some way. Originally we had files being read in using the typical \texttt{std::stringstream} and \texttt{getline()}, but this proved to be inefficient and slow. Now the file is loaded into an internal stream buffer; the buffer is traversed to find the number of characters in it. Then a char pointer is allocated the size calculated from before and \texttt{buffer->sgetn(pointer, size)} is called to copy the buffer into the pointer.
+
+\subsection{Command line arguments}
+We have added some command line argument options for the user to change the run time behaviour to pick what is best for them. The sequential and OpenCL implementation can be used, output file writing, input file to read etc.\\
+
+For the OpenCL implementation the user can specify different vector input sizes which corresponds to a work group size. Usually, with GPUs, a larger work group size will give better performance but too large could either crash the device (bigger than it can fit) or cause incorrect results to be given (using zeros because it's going out of bounds). Furthermore, selecting a vector size that is not an exponential of 2 crashes some devices.

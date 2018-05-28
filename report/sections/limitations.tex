@@ -1,0 +1,30 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Limitations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \section{Limitations and Challenges}
+  From our results it's clear to see that calculating statistical values in OpenCL do not provide a speedup in comparison to in sequential on the host code. There are many reasons behind these findings, and some of them are due to the limitations of OpenCL, and the nature of the problem.
+
+\subsection{Complexity of Algorithms}
+Sequential algorithms for statistical calculations are inherently fast; especially when using the algorithms we decided to use. As the sequential algorithms are online, we can run them with $O(n)$ time complexity. Getting a parallel algorithm that can achieve a better speedup is difficult, and with the addition of the overhead from transferring data to and from the host and device, parallel will nearly always be slower. With a more naive solution for the sequential algorithms, it may be possible that a speed up would occur.
+
+\subsection{Problem Structure}
+The given brief was to perform a reduction in parallel. OpenCL and acceleration devices typically are employed for vector-to-vector operations as synchronisation via barriers is not needed. The results clearly show that no speedup was gained from performing these simple calculations as a reduction in parallel. In order for parallelisation using OpenCL to be worth the effort, the computational effort during reduction would need to be greater (compared to the incremental case), or the problem would need to involve large vector operations.
+
+\subsection{Bandwidth and Data Transfer}
+According to Nvidia \cite{NVIDIA2010}, bandwidth is one of the most important gating factors for performance. The significant limiting factor with OpenCL and the main reason why we didn't get a speedup is because of our data transfer rate which is limited by the bandwidth of the device.
+We attempted to isolate the transfer time by testing using a work group size of 1024, on a 10 million data point csv file while changing different parts of the code. Testing on this file, we found out that it usually requires 4 seconds to run, where 2 seconds of this are for the "base" of the run, while 1 second is used for transferring and another second for the kernel to execute. As mentioned in the profiling section, we had to use a more primitive form of timing resulting in these findings.\\
+
+Another challenge we encounter was loading the data from a csv file and into an OpenCL en-queue buffer. Seeing as we needed to specify data-type both in the host code and in the kernel, we required our file to be parsed into that format. This process creates some overhead compared with loading the file straight into the kernels en-queue buffer. It is possible to load a host made buffer into an OpenCL en-queue buffer, but data-types and sizing prove to be another difficulty (\texttt{char} to \texttt{double}). If the initial read from file and transfer could be removed and put straight into the buffer, there may have been a substantial performance increase, which possibly could have surpassed the speed of sequential processing.
+
+\subsection{Representation Error}
+Representation error is not an issue to seven significant figures, and we probably achieve even more considering we compile for 64-bit systems and use doubles to represent each data point. The accuracy provided is almost unusable, statistics usually do not use such levels, and neither do most engineering applications. If more precision is required than speed is of a lesser priority, it's highly likely that our application can probably support this with some modification but with a performance penalty. Most numbers are not near the limit of 64-bit doubles either. Double precision gives typically 15 to 17 accurate significant figures, so by claiming 7, we are quite conservative based on our divisions, chunking and huge data sizes of billions of data points. NASA's JPL has an article about this \cite{nasa_2016}.
+
+\subsection{Nvidia and OpenCL}
+We targeted both CPUs and GPUs with our OpenCL application, thus we naturally had to support Nvidia's processors. Nvidia's products do not support OpenCL nearly as well as AMD, nor Intel (including GPUs) so we were forced to use OpenCL 1.2. We used compiler directives such as ``define \#NVIDIA''which forced us to use version 1.2 if it was on a Nvidia system, and 2.0 on any other.
+
+\subsection{Linux vs Windows 10}
+Linux naturally reads faster than Windows, hence it can have a much lower run time of the sequential and parallel implementation. Windows was also unable to use a better token splitter that was provided on Linux (\texttt{strsep()}), and hence we had to settle for standard, more dangerous splitters, \texttt{strtok} and \texttt{strtok\_r}. With our current file buffering and reading system, Windows cannot read certain file sizes. We believe that this is the result of a 32-bit pointer overflow, as the number of characters read when the exit condition is reached is around 2.1 billion. This problem does not occur on Linux, and we believe this is due to the environment we used in Windows (MinGW), but we cannot be sure from our research. Compiling via the Visual Studio C++ Compiler would likely resolve this issue.
+
+\subsection{Profiling}
+Due to a lack of profiling tools (NVIDIA dropped support for nvvp, open-source profilers not working correctly), we could not correctly analyse our OpenCL run time, which meant we also could not identify statistics about timing, occupancy and bottlenecks.

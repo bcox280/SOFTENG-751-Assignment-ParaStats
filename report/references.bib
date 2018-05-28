@@ -1,0 +1,79 @@
+@article{Karimi2015,
+abstract = {OpenCL, along with CUDA, is one of the main tools used to program GPGPUs. However, it allows running the same code on multi-core CPUs too, making it a rival for the long-established OpenMP. In this paper we compare OpenCL and OpenMP when developing and running compute-heavy code on a CPU. Both ease of programming and performance aspects are considered. Since, unlike a GPU, no memory copy operation is involved, our comparisons measure the code generation quality, as well as thread management efficiency of OpenCL and OpenMP. We evaluate the performance of these development tools under two conditions: a large number of short-running compute-heavy parallel code executions, when more thread management is performed, and a small number of long-running parallel code executions, when less thread management is required. The results show that OpenCL and OpenMP each win in one of the two conditions. We argue that while using OpenMP requires less setup, OpenCL can be a viable substitute for OpenMP from a performance point of view, especially when a high number of thread invocations is required. We also provide a number of potential pitfalls to watch for when moving from OpenMP to OpenCL.},
+author = {Karimi, Kamran},
+file = {:home/logan/Documents/Mendeley/arXiv1503.06532 cs/Karimi/Karimi - 2015 - The Feasibility of Using OpenCL Instead of OpenMP for Parallel CPU Programming.pdf:pdf},
+journal = {arXiv:1503.06532 [cs]},
+title = {{The Feasibility of Using OpenCL Instead of OpenMP for Parallel CPU Programming}},
+url = {http://arxiv.org/abs/1503.06532{\%}5Cnhttp://www.arxiv.org/pdf/1503.06532.pdf},
+year = {2015}
+}
+@misc{NVIDIA2010,
+author = {NVIDIA},
+title = {{OpenCL Best Practices Guide}},
+url = {https://www.cs.cmu.edu/afs/cs/academic/class/15668-s11/www/cuda-doc/OpenCL{\_}Best{\_}Practices{\_}Guide.pdf},
+year = {2010}
+}
+@misc{KhronosGroup2012,
+author = {{Khronos Group}},
+title = {{The OpenCL Specification}},
+url = {https://www.khronos.org/registry/OpenCL/specs/opencl-1.2.pdf},
+year = {2012}
+}
+@article{Choi2010,
+abstract = {Wireless networks of smart sensors with computations distributed over multiple sensor packages have shown considerable promise in providing low-cost structural health monitoring. In these networks, microprocessors are typically embedded in individual smart sensor packages. The efficiency of embedded computational algorithms is of critical importance because the size, cost, and power requirements of the sensor arrays are central concerns. Here, very efficient methodologies are presented to compute statistical moments of a measured response time-history. These moments: the mean, standard deviation, skewness, and kurtosis are often used to characterize a measured irregular response. Two alternative approaches are presented, each of which can save substantial computer memory requirements and CPU time in certain applications. The first approach reconsiders the computational benefits of computing statistical moments by separating the data into bins and then computing the moments from the geometry of the resulting histogram, which effectively becomes a one-pass algorithm for higher moments. One benefit is that the statistical moment calculations can be carried out to arbitrary accuracy such that the computations can be tuned to the precision of the sensor hardware. The second approach is a new analytical methodology to combine statistical moments from individual segments of a time-history such that the resulting overall moments are those of the complete time-history. This methodology could be used to allow for parallel computation of statistical moments with subsequent combination of those moments, or for combination of statistical moments computed at sequential times. A worked example is presented comparing two implementations of the new methodologies with conventional calculations in monitoring the global performance of an offshore tension leg platform. Accuracy, efficiency, and storage requirements of the calculation methods are compared with those of conventional methods. The results show that substantial CPU and memory savings can be attained with no loss in accuracy and that more dramatic savings can be attained if a slight reduction in accuracy is acceptable.},
+author = {Choi, Myoungkeun and Sweetman, Bert},
+doi = {10.1177/1475921709341014},
+file = {:home/logan/Documents/Mendeley/Structural Health Monitoring/Choi, Sweetman/Choi, Sweetman - 2010 - Efficient calculation of statistical moments for structural health monitoring.pdf:pdf},
+issn = {14759217},
+journal = {Structural Health Monitoring},
+keywords = {Continuous health monitoring,Non-Gaussian,Statistical moments,Structural response,Time series analysis},
+number = {1},
+pages = {13--24},
+title = {{Efficient calculation of statistical moments for structural health monitoring}},
+url = {http://journals.sagepub.com/doi/10.1177/1475921709341014},
+volume = {9},
+year = {2010}
+}
+@article{Chan1979,
+abstract = {A general formula is presented for computing the sample v;iiiancc for a sample of size m+ n given the means and variances for two subsnn+lcs of sizes m and n. This formula is used in the construction of a pa.irwisc nl{\~{}}:orithm for computing the variance. Other applications are discussed as v{\~{}}ll, including the use of updating formulae in a parallel computin g cnviornmcn t. Wc present numerical results and rounding error analyses for several numerical schcr{\~{}}{\~{}}s.},
+author = {Chan, T.F. and Golub, G.H. and LeVeque, R.J. and Science., Stanford Univ Calif Dept of Computer},
+doi = {10.1007/978-3-642-51461-6_3},
+file = {:home/logan/Documents/Mendeley/Annals of Physics/Chan et al/Chan et al. - 1979 - Updating formulae and a pairwise algorithm for computing sample variances.pdf:pdf},
+isbn = {3705100025},
+journal = {Annals of Physics},
+pages = {258},
+title = {{Updating formulae and a pairwise algorithm for computing sample variances}},
+url = {http://scholar.google.com/scholar?hl=en{\&}btnG=Search{\&}q=intitle:Updating+Formulae+and+pairwise+algorithm+for+computing+sample+variances{\#}0},
+volume = {54},
+year = {1979}
+}
+@article{Stone2010,
+abstract = {The OpenCL standard offers a common API for program execution on systems composed of different types of computational devices such as multicore CPUs, GPUs, or other accelerators.},
+author = {Stone, John E. and Gohara, David and Shi, Guochun},
+doi = {10.1109/MCSE.2010.69},
+file = {:home/logan/Documents/Mendeley/Computing in Science and Engineering/Stone, Gohara, Shi/Stone, Gohara, Shi - 2010 - OpenCL A parallel programming standard for heterogeneous computing systems.pdf:pdf},
+isbn = {1521-9615 VO - 12},
+issn = {15219615},
+journal = {Computing in Science and Engineering},
+keywords = {barrier synchronization,matrix multiply,opencl},
+number = {3},
+pages = {66--72},
+pmid = {21037981},
+title = {{OpenCL: A parallel programming standard for heterogeneous computing systems}},
+url = {http://www.cs.nyu.edu/{~}lerner/spring12/Preso07-OpenCL.pdf},
+volume = {12},
+year = {2010}
+}
+@article{Pebay2008,
+abstract = {We present a formula for the pairwise update of arbitrary-order centered statistical moments. This formula is of particular interest to compute such moments in parallel for large-scale, distributed data sets. As a corollary, we indicate a specialization of this formula for incremental updates, of particular interest to streaming implementations. Finally, we provide pairwise and incremental update formulas for the covariance.},
+author = {P{\'{e}}bay, Philippe},
+file = {:home/logan/Documents/Mendeley/Sandia Report/P{\'{e}}bay/P{\'{e}}bay - 2008 - Formulas for Robust, One-Pass Parallel Computation of Covariances and Arbitrary-Order Statistical Moments.pdf:pdf},
+journal = {Sandia Report},
+number = {September},
+pages = {1--18},
+title = {{Formulas for Robust, One-Pass Parallel Computation of Covariances and Arbitrary-Order Statistical Moments}},
+url = {http://www.ntis.gov/search/product.aspx?ABBR=DE20111028931{\%}5Cninfoserve.sandia.gov/sand{\_}doc/2008/086212.pdf},
+volume = {SAND2008-6},
+year = {2008}
+}
+@misc{nasa_2016, title={How Many Decimals of Pi Do We Really Need? - Edu News | NASA/JPL Edu}, url={https://www.jpl.nasa.gov/edu/news/2016/3/16/how-many-decimals-of-pi-do-we-really-need/}, journal={NASA}, publisher={NASA}, year={2016}, month={Mar}}

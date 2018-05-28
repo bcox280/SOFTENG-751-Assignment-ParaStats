@@ -1,0 +1,7 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CONCLUSION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Discussion \& Conclusion}
+
+The OpenCL implementation for calculation of statistical values only provided us with a decrease in speed when compared to sequential. The problem we were solving is not suited to be processed in compute devices due to the vast amount of overhead when transferring data between the host and the device. Using OpenMP instead would likely provide a better performance increase than OpenCL due to not having a large overhead. Our initial sequential algorithms are also highly efficient so parallelisation without taking into account overhead does not provide much speedup. Both implementations process billions of data points in a matter of minutes which indicates that for most applications sequential may be good enough and Big-Data concepts such as MapReduce on distributed systems would have to be employed for larger data sets. Reduction problems such as statistical values do not fully saturate the acceleration devices resulting in poor occupancy. According to Stone et al., vector problems such as matrix multiplication or manipulation with large work item and work group size can fully saturate the devices and thus hide the effects of latency \cite{Stone2010}. With more time we would have looked into further reducing the transfer time of data between the host and devices by looking further into the specification\cite{KhronosGroup2012}.

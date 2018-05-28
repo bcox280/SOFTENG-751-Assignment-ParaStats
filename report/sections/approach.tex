@@ -1,0 +1,41 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MAIN BODY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Approach}
+
+
+Before we were able to start implementing the project, we needed to look at what techniques and substance the implementation would require. These requirements meant creating a consistent understanding between group members of the process we would take, as well as what the project would be designed to do to ensure correctness at the end. As a result, we conducted some initial research and generated data before the implementation began.
+
+\subsection{Data Creation}
+
+As we would be dealing with large data-sets, we looked at creating a standard format which would reduce some of the difficulties of processing input data. We decided to use CSV files as they are a widely used standard with minimal file-size. The data was generated through a custom MATLAB script that could generate random continuous values from a given probability distribution. We assumed the format of the input data would contain these attributes:
+\begin{itemize}
+    \setlength\itemsep{0pt}
+    \item Clean data (no other characters, legitimate values, decimal notation etc.)
+    \item No unnecessary gaps between data points
+    \item The size of the data set was a multiple of the work group size.
+\end{itemize}
+The first two assumptions are valid as the input data is pre-processed so can be cleaned at the CSV-generation step (out of scope). The final assumption is valid as if the data set were not a multiple of the work group size, the final data points would be processed in sequential due to the overhead of creating another buffer. The test data was created by assuming normal and logistic probability distributions, and randomly generating data from these. We replicated 3 processes, temperature ($\mu$(mean)=20°C), voltage ($\mu$=230V) and air pressure ($\mu$=1020hPa), each with 5 significant figures. These provide realistic data sets that might be expected in practice such as streams of data from power meters, barometers and thermometers which would create millions of data points.
+
+\subsection{Statistics}
+Descriptive statistics are the representative scalar values that describe a data set and its estimated probability distribution. This includes measures of location (mode, mean, median, etc), measures of spread (standard deviation, variance) and measures of shape (skewness and kurtosis). We have discarded co-variance statistics for multivariate datasets as data from multiple variables is out of scope. We can calculate all of these values from some minimal set of meta-statistics. These aggregate-statistics are the sample size, first 4 orders of statistical moments, min/max and a histogram. The first 4 statistical moments can be used to calculate the mean, standard deviation/variance, skewness and kurtosis respectively. The histogram can calculate the mode (and second-most-frequent, least-frequent, etc) as well as rank statistics (median, upper quartile, lower quartile, etc). Thus if we find efficient algorithms for calculating these meta-statistics, we can obtain any of the required statistics.
+
+\paragraph{Minimum and Maximum}are calculated by just comparing the current Min/Max against a new candidate. This can trivially be implemented as an online algorithm (for sequential) or parallel reduction (in OpenCL).
+
+\paragraph{The first 4 statistical moments}have well-defined and numerically-stable algorithms \cite{Pebay2008} for both online \cite{Choi2010} and parallel \cite{Chan1979} implementations that require only 1 floating point division per update. These algorithms do not suffer from the underflow/overflow that naive algorithms do as there is no summation occurring. The only case where underflow/overflow could occur is when the range of the dataset is very large, which is unlikely in the case of natural processes. In the case of reducing a vector where the length is a power of 2, we can simplify the equation to require no floating point divisions, as such we have implemented this algorithm in our OpenCL kernel. The first order moment $M_1$ is equal to the mean. Variance (square of standard deviation) is the 2nd moment divided by 2: $\sigma^2 = \frac{M_2}{2}$. The skewness can be calculated as $\frac{\sqrt{n}M_3}{M_2^1.5}$. Finally kurtosis is $\frac{nM_4}{M_2^2}$. These values along with min/max are sufficient to describe a dataset and estimate its probability distribution.
+
+\paragraph{The histogram}requires a finite number of bins, so inherently will lose accuracy due to larger representation error. However, if we know the properties of the probability distribution (such as the range, mean, dispersion, shape as calculated above)) we can use non-uniform bin sizes to minimise the errors to the point where double-precision error and sampling error have similar magnitude. Smaller bin sizes can be used closer to the peaks of the dataset where a finer distinction will be required. Finding the mode (or kth-frequent) value can be done by calculating the max (or kth-rank) statistic of the histogram. Finding the median (or k-th rank) can be found by summing along the histogram till you reach the bin that contains half of the sample size. Computing the histogram requires significant local (work-group) memory, so becomes infeasible in the case of GPU acceleration using OpenCL as memory overflows to the host and communication costs outweigh any potential speedup. The histogram calculation is more suited towards an OpenMP approach. Due to poor initial results in OpenCL and time constraints, this meta-statistic was not implemented.
+
+% PRE-IMPLEMENTATION
+
+\subsection{Development setup}
+Before we started implementing our project, we first needed to think about how our development process would function. Our process would need to include both the approach we would need to take for coding the project, as well as how we could ensure that our system was both functioning correctly, and correctly implemented. These reasons provided us with the motivation to use technologies such as version control systems and continuous integration.
+
+\subsubsection{Version Control}
+We used version control as it would allow all group members to be able to concurrently develop the project and be able to implement different functionality in parallel. Version control also provided a code review process for this project, which helped ensure correct functionality of the developing project.
+
+
+\subsubsection{Continuous Integration/Testing}
+Being able to ensure correctness of implementation was a significant goal of the project. We chose Travis-CI as it would help provide checks that would ensure this correctness, by running tests anytime a branch is pushed to or pull requested. Continuous integration also allowed for the master branch to remain in an unbroken state so that each group member could work off of it.
+Tests were used both on Travis-CI and locally to ensure that results on parallel and sequential were within our accuracy goal.
