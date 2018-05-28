@@ -28,7 +28,7 @@ public:
     void printResults(SummaryStatistics summaryStatistics);
 
 private:
-    const string _version = "beta";
+    const string _version = "1.0";
     string _outputFilename = "results.csv";
     string _inputFilename = "../data/voltage_normal_10240000.csv";
     bool _parallel = true;
