@@ -15,10 +15,7 @@ typedef std::chrono::high_resolution_clock Clock;
 
 using namespace std;
 
-// TODO Fix reading input file and try to standardise
-// TODO Try compiling with -O3
-// TODO Create a TravisCI Equivalent test script for winDOS and *nix OS -> possibly get travis to run the same script
-// TODO Document how to setup winDOS or *nix to compile and run the application
+// TODO Fix reading input file in winDOS and try to standardise
 // TODO FileReader testing via reading in, printing and and comparing hashcodes
 
 void printResultsToCsvFile(SummaryStatistics finalStatistics, string *outputFilename);

@@ -46,16 +46,18 @@ SummaryStatistics SequentialComputation::computeData() {
                     break;
                 }
 
-                if (max < stod(indValue)) {
-                    max = stod(indValue);
+                double dataPoint = stod(indValue);
+
+                if (max < dataPoint) {
+                    max = dataPoint;
                 }
-                if (min > stod(indValue)) {
-                    min = stod(indValue);
+                if (min > dataPoint) {
+                    min = dataPoint;
                 }
 
                 unsigned long long n1 = completedDataPoints;
                 unsigned long long n = completedDataPoints + 1;
-                double delta = stod(indValue) - M1;
+                double delta = dataPoint - M1;
                 double delta_n = delta / n;
                 double delta_n2 = delta_n * delta_n;
                 double term1 = delta * delta_n * n1;

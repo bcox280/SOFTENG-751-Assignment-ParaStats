@@ -1,8 +1,5 @@
 #include "SummaryStatistics.hpp"
 
-/* TODO Check that the following source for our calculations is correct
-https://stats.stackexchange.com/questions/88837/single-pass-algorithm-for-kurtosis */
-
 SummaryStatistics::SummaryStatistics() = default;
 
 void SummaryStatistics::updateStats(rawStats stats, size_t count) {

@@ -7,7 +7,6 @@ ParallelComputation::ParallelComputation(const string &fileName, bool defaultDev
         /************************
          * Step 1: Select device and create context and queue
          */
-        // TODO: Implement choosing of devices from commandline arguments
         cl_uint deviceIndex;
 
         // Get list of platforms
