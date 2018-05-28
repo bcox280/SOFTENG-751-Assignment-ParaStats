@@ -99,8 +99,7 @@ void CommandLineInterface::printRuntime(std::chrono::system_clock::time_point in
 }
 
 void CommandLineInterface::printResults(SummaryStatistics summaryStatistics) {
-//        cout << std::scientific;
-            cout << std::setprecision(17);
+        cout << std::scientific;
         cout << "Count " << summaryStatistics.getCount() << endl;
         cout << "Mean " << summaryStatistics.getM1() << endl;
 //    cout << "Mode(s) ";
