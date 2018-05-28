@@ -36,6 +36,7 @@ private:
     bool _parallel = true;
     bool _quiet = false;
     bool _printToFile = false;
+    bool _customVectorSize = false;
     size_t _inputVectorSize;
 
     void printHelp();

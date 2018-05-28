@@ -21,6 +21,7 @@ CommandLineInterface::CommandLineInterface(int numberOfArguments, char* argument
         } else if (vectorChangeFlag) {
             vectorChangeFlag = false;
             if (checkOption("z", arguments[i - 1])) {
+                _customVectorSize = true;
                 size_t vector;
                 try {
                     vector = stoi(arguments[i]);
@@ -73,6 +74,9 @@ CommandLineInterface::CommandLineInterface(int numberOfArguments, char* argument
             cout << "Running in OpenCL mode" << endl;
         } else {
             cout << "Running in sequential mode" << endl;
+        }
+        if (_customVectorSize) {
+            cout << "Using vector size of " << _inputVectorSize << " (must be divisible from the data size)" << endl;
         }
         printSeparatorLine();
     }
