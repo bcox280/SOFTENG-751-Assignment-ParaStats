@@ -6,9 +6,10 @@
 #include "SequentialComputation.hpp"
 #include "ParallelComputation.hpp"
 
-SummaryStatistics sequential1024 = SequentialComputation("../data/voltage_normal_10240000.csv").computeData();
+extern bool runOnTravis;
 
 class ComputationTest : public ::testing::TestWithParam<SummaryStatistics *> {
+
 };
 
 #endif

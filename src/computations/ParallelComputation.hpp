@@ -20,6 +20,8 @@ class ParallelComputation : public AbstractComputation {
 public:
     explicit ParallelComputation(const string &fileName);
 
+    ParallelComputation(const string &fileName, bool defaultDevice);
+
     SummaryStatistics computeData() override;
 
     SummaryStatistics provideProgressUpdate() override;

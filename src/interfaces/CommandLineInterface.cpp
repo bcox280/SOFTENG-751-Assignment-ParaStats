@@ -74,27 +74,28 @@ void CommandLineInterface::printRuntime(std::chrono::system_clock::time_point in
 }
 
 void CommandLineInterface::printResults(SummaryStatistics summaryStatistics) {
-    cout << std::scientific;
-    cout << "Count " << summaryStatistics.getCount() << endl;
-    cout << "Mean " << summaryStatistics.getM1() << endl;
+//        cout << std::scientific;
+            cout << std::setprecision(17);
+        cout << "Count " << summaryStatistics.getCount() << endl;
+        cout << "Mean " << summaryStatistics.getM1() << endl;
 //    cout << "Mode(s) ";
 //    for (double mode : summaryStatistics.getModes())
 //        std::cout << mode << ',';
 //    cout << endl;
 //    cout << "Median (financial) " << summaryStatistics.getFinancialMedian() << endl;
-    cout << "Min " << summaryStatistics.getMin() << endl;
-    cout << "Max " << summaryStatistics.getMax() << endl;
-    cout << "Estimated variance " << summaryStatistics.getEstimatedVariance() << endl;
-    cout << "Estimated standard deviation " << summaryStatistics.getEstimatedStandardDev() << endl;
-    cout << "Skewness " << summaryStatistics.getSkewness() << endl;
-    cout << "Kurtosis (normal) " << summaryStatistics.getKurtosis() << endl;
-    cout << "Sum " << summaryStatistics.getSum() << endl;
-    cout << "2nd moment " << summaryStatistics.getM2() << endl;
-    cout << "3rd moment " << summaryStatistics.getM3() << endl;
-    cout << "4th moment " << summaryStatistics.getM4() << endl;
-    cout << "Standard deviation " << summaryStatistics.getStandardDev() << endl;
-    cout << "Variance " << summaryStatistics.getVariance() << endl;
-    cout << "Excess kurtosis " << summaryStatistics.getExcessKurtosis() << endl;
+        cout << "Min " << summaryStatistics.getMin() << endl;
+        cout << "Max " << summaryStatistics.getMax() << endl;
+        cout << "Estimated variance " << summaryStatistics.getEstimatedVariance() << endl;
+        cout << "Estimated standard deviation " << summaryStatistics.getEstimatedStandardDev() << endl;
+        cout << "Skewness " << summaryStatistics.getSkewness() << endl;
+        cout << "Kurtosis (normal) " << summaryStatistics.getKurtosis() << endl;
+        cout << "Sum " << summaryStatistics.getSum() << endl;
+        cout << "2nd moment " << summaryStatistics.getM2() << endl;
+        cout << "3rd moment " << summaryStatistics.getM3() << endl;
+        cout << "4th moment " << summaryStatistics.getM4() << endl;
+        cout << "Standard deviation " << summaryStatistics.getStandardDev() << endl;
+        cout << "Variance " << summaryStatistics.getVariance() << endl;
+        cout << "Excess kurtosis " << summaryStatistics.getExcessKurtosis() << endl;
 //    cout << "Upper median " << summaryStatistics.getUpperMedian() << endl;
 //    cout << "Lower median " << summaryStatistics.getLowerMedian() << endl;
 }

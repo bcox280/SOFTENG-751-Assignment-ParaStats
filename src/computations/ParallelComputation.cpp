@@ -1,6 +1,6 @@
 #include "ParallelComputation.hpp"
 
-ParallelComputation::ParallelComputation(const string &fileName) : AbstractComputation(fileName) {
+ParallelComputation::ParallelComputation(const string &fileName, bool defaultDevice) : AbstractComputation(fileName) {
     // Catch OpenCL errors
     try {
         /************************
@@ -39,20 +39,27 @@ ParallelComputation::ParallelComputation(const string &fileName) : AbstractCompu
             devices[i].getInfo(info, &name[i]);
         }
 
-        for (int i = 0; i < numDevices; i++) {
-            cout << "Device " << i << ": " << name[i] << endl;
-        }
-        while(true) {
-            cout << "Select the device you would like to use: (0 - " << numDevices-1 << ")" << endl;
-            cin >> deviceIndex;
-            if (cin.fail()) {
-                cin.clear();
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                cout << "Input was not a number" << endl;
-            } else if (deviceIndex >= 0 && deviceIndex < numDevices) {
-                break;
-            } else {
-                cout << "Invalid device index" << endl;
+        if (defaultDevice) {
+            deviceIndex = numDevices -1;
+            if (numDevices < 1) {
+                throw 1;
+            }
+        } else {
+            for (int i = 0; i < numDevices; i++) {
+                cout << "Device " << i << ": " << name[i] << endl;
+            }
+            while (true) {
+                cout << "Select the device you would like to use: (0 - " << numDevices - 1 << ")" << endl;
+                cin >> deviceIndex;
+                if (cin.fail()) {
+                    cin.clear();
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    cout << "Input was not a number" << endl;
+                } else if (deviceIndex >= 0 && deviceIndex < numDevices) {
+                    break;
+                } else {
+                    cout << "Invalid device index" << endl;
+                }
             }
         }
 
@@ -115,6 +122,10 @@ ParallelComputation::ParallelComputation(const string &fileName) : AbstractCompu
         cout << "Exception\n";
         cerr << "ERROR: " << err.what() << "(" << err.err() << ")" << endl;
     }
+}
+
+ParallelComputation::ParallelComputation(const string &fileName)
+        : ParallelComputation::ParallelComputation(fileName, false) {
 }
 
 SummaryStatistics ParallelComputation::computeData() {

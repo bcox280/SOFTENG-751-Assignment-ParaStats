@@ -13,6 +13,7 @@ if (WIN32)
     find_package( OpenCL REQUIRED )
 
     include_directories( ${OPENCL_DIR} )
+elseif (APPLE)
 else(WIN32)
     set(OPENCL_LIBRARIES OpenCL)
 endif(WIN32)
@@ -30,7 +31,12 @@ include_directories(src/computations src/statistics src/interfaces)
 set(CMAKE_CXX_STANDARD 17)
 
 # Set up executable
-add_executable (SOFTENG-751-Assignment-ParaStats ${SOURCE_FILES})
+if (APPLE)
+    add_executable (SOFTENG-751-Assignment-ParaStats ${SOURCE_FILES} cl.hpp)
+else(APPLE)
+    add_executable (SOFTENG-751-Assignment-ParaStats ${SOURCE_FILES})
+endif(APPLE)
+
 target_link_libraries(SOFTENG-751-Assignment-ParaStats ${OPENCL_LIBRARIES})
 
 
@@ -79,6 +85,7 @@ set(TEST_SOURCE_FILES
         test/main_test.cpp
         test/computations/ComputationTest.cpp
         test/statistics/SummaryStatisticsTest.cpp)
+include_directories(src/computations src/statistics src/interfaces test/computations)
 
 # Set up executable
 add_executable (SOFTENG-751-Assignment-ParaStats-Test ${TEST_SOURCE_FILES})

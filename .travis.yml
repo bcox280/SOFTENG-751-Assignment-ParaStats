@@ -1,3 +1,5 @@
+os:
+    - linux
 language: cpp
 sudo: enabled
 addons:
@@ -5,10 +7,10 @@ addons:
         packages:
             - ocl-icd-opencl-dev
 script:
-  - cmake .
-  - make SOFTENG-751-Assignment-ParaStats
-  - make SOFTENG-751-Assignment-ParaStats-Test
-  - ./SOFTENG-751-Assignment-ParaStats-Test
+    - cmake .
+    - make SOFTENG-751-Assignment-ParaStats
+    - make SOFTENG-751-Assignment-ParaStats-Test
+    - ./SOFTENG-751-Assignment-ParaStats-Test TRAVIS
 notifications:
     slack:
         rooms:

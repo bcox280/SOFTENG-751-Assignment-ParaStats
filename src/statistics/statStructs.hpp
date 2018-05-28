@@ -3,14 +3,17 @@
 
 // Add openCL library, declare enable_exceptions
 // NVIDIA yet to support OpenCL 2.0
-#define CL_USE_DEPRECATED_OPENCL_1_2_APIS
 #define NVIDIA
 
 #ifdef WIN32
 #pragma GCC diagnostic ignored "-Wignored-attributes"
 #endif
 
-#ifdef NVIDIA
+#if defined(__APPLE__) || defined(__MACOSX)
+#define __CL_ENABLE_EXCEPTIONS
+#define CL_USE_DEPRECATED_OPENCL_1_2_APIS
+#include "CL/cl.hpp"
+#elif defined(NVIDIA)
 #define __CL_ENABLE_EXCEPTIONS
 #define CL_USE_DEPRECATED_OPENCL_1_2_APIS
 #include "CL/cl.hpp"
